@@ -5,7 +5,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace CV19.ViewModels.Base
-{ //интерфейс INotifyPropertyChanged уведомляет о том что внутри нашего объекта изменилось какоето свойство
+{ 
+    //интерфейс INotifyPropertyChanged уведомляет о том что внутри нашего объекта изменилось какоето свойство
     //тоесть если коктоето свойство объекта изменилось то этот интерфейс может обновить визуальную часть.
     //абстарктный клас можно влючать в другие классы ное ему не нужен конструктор вместо этого используется конструктор класса наследника
     internal abstract class ViewModel : INotifyPropertyChanged
