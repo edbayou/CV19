@@ -9,7 +9,7 @@ namespace CV19.ViewModels.Base
     //интерфейс INotifyPropertyChanged уведомляет о том что внутри нашего объекта изменилось какоето свойство
     //тоесть если коктоето свойство объекта изменилось то этот интерфейс может обновить визуальную часть.
     //абстарктный клас можно влючать в другие классы ное ему не нужен конструктор вместо этого используется конструктор класса наследника
-    internal abstract class ViewModel : INotifyPropertyChanged
+    internal abstract class ViewModel : INotifyPropertyChanged, IDisposable
     {
         //PropertyChangedEventHandler - делегат, PropertyChanged - событие
         public event PropertyChangedEventHandler PropertyChanged;
@@ -36,6 +36,24 @@ namespace CV19.ViewModels.Base
             //и генерируем метод OnPropertyChnged
             OnPropertyChnged(PropertyName);
             return true; // по этому флагу мы можем определять выполнилась ли изменение свойства и в последствии выполнить еще какуюто работу по обнавлению других свойств например которые с ним связаны
+        }
+        //пример реализации метода Dispose
+        /*//если появится деструктор
+        ~ViewModel()
+        {
+            Dispose(false);
+        }*/
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        private bool _Disposed;
+        //метод с параметром  Disposing,он виртуальный чтобы наследники его могли переопределить
+        protected virtual void Dispose(bool Disposing)
+        {
+            if (!Disposing || _Disposed) return;
+            _Disposed = true;//освобождать нечего
+            //освобождение управляемых ресурсов
         }
     }
 }
