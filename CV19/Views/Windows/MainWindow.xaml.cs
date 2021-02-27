@@ -24,5 +24,11 @@ namespace CV19
         {
             InitializeComponent();
         }
+
+        private void GridSplitter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            GridLength gl = new GridLength(10.0,GridUnitType.Star);
+            ddd1.Width = gl;
+        }
     }
 }
