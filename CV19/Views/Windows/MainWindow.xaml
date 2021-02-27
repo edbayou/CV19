@@ -17,8 +17,8 @@
         <!--дата контекст иерархичский и применяется в зависимости от места объявления если в Window то применяется на все окно-->
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid>
-        <!--UpdateSourceTrigger=PropertyChanged обнавляет элемент при изменении-->
+    <!--<Grid>
+        UpdateSourceTrigger=PropertyChanged обнавляет элемент при изменении
         <TextBox HorizontalAlignment="Left" 
                  Margin="88,49"
                  Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
@@ -26,5 +26,43 @@
                  VerticalAlignment="Top" 
                  Width="312"/>
 
-    </Grid>
+    </Grid>-->
+    <!--вместо грида используем док панель, она позволяет притягвать содержимое к соответствующим краям, и последний элемент растягивается на оставшееся пространство-->
+    <DockPanel>
+        <!-- DockPanel.Dock="Top" расположение в докпанеле-->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Выход"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Помощь">
+                <MenuItem Header="О программе"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem MinWidth="150" MaxWidth="300">
+                <TextBlock Text="Загрузка"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <ProgressBar Width="120" Height="14" Value="30"/>
+            </StatusBarItem>
+        </StatusBar>
+        <!--так как нам надо растянуть табконтрол на все оставшееся пространство пишем его в конце-->
+        <TabControl>
+            <TabItem Header="Вкладка 1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="83*"/>
+                        <RowDefinition Height="111*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="81*"/>
+                        <ColumnDefinition Width="316*"/>
+                    </Grid.ColumnDefinitions>
+                    <Rectangle  Grid.Column="0" Grid.Row="0"  Fill="Blue" Stroke="Red" StrokeThickness="3" RadiusX="5" RadiusY="7"/>
+                    <Ellipse Grid.Column="1" Grid.Row="0"  Fill="Blue" Stroke="Red" StrokeThickness="3"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Вкладка 2"></TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>
