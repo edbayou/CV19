@@ -66,7 +66,7 @@ namespace CV19.ViewModels
         private void OnCloseApplicationCommandExecuted(object p)
         {
             //выполняется когда команда выполняется
-            Application.Current.Shutdown();
+           // Application.Current.Shutdown();
         }
         #endregion
         #endregion

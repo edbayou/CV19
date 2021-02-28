@@ -15,6 +15,13 @@
         mc:Ignorable="d"
         Title="{Binding Title}" 
         Height="450" Width="800">
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CloseApplicationCommand}"/>
+    </Window.InputBindings>
+        <!--на любом уровне разметки мы можем объявить ресурсы-->
+    <Window.Resources>
+        <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"></cmd:CloseApplicationCommand>
+    </Window.Resources>
     <Window.DataContext>
         <!--дата контекст иерархичский и применяется в зависимости от места объявления если в Window то применяется на все окно-->
         <vm:MainWindowViewModel/>
@@ -36,11 +43,14 @@
             <MenuItem Header="Файл">
                 <!--<MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"></MenuItem>-->
                 <!--алтернативный способ задовать команды-->
-                <MenuItem Header="Выход">
+                <!--<MenuItem Header="Выход">
                     <MenuItem.Command>
                         <cmd:CloseApplicationCommand/>
                     </MenuItem.Command>
                 </MenuItem>
+            </MenuItem>-->
+                <!--используем команду как ресурс-->
+                <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"/>
             </MenuItem>
             <MenuItem Header="Помощь">
                 <MenuItem Header="О программе"></MenuItem>
@@ -68,7 +78,15 @@
                         <ColumnDefinition x:Name="ddd1" Width="316*"/>
                     </Grid.ColumnDefinitions>
                     <Rectangle  Grid.Column="0" Grid.Row="0"  Fill="Blue" Stroke="Red" StrokeThickness="3" RadiusX="5" RadiusY="7"/>
-                    <Ellipse Grid.Column="1" Grid.Row="0"  Fill="Blue" Stroke="Red" StrokeThickness="3"/>
+                    <!--у всех визуальнхы элементов есть InputBindig к которому мужно привязать команду,но не у всех есть Command-->
+                    <Ellipse Grid.Column="1" Grid.Row="0"  Fill="Blue" Stroke="Red" StrokeThickness="3">
+                        <Ellipse.InputBindings>
+                            <!--суда можно добовлять либо клавиатурные либо привязки мыши-->
+                            <MouseBinding Command="{StaticResource CloseApplicationCommand }"
+                                          MouseAction="LeftDoubleClick"/>
+                        </Ellipse.InputBindings>
+                    </Ellipse>
+                           
                     <!--за грид сплитер можно тянуть меняя размер содержимого-->
                     <GridSplitter x:Name="gsFrma1" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
                                   HorizontalAlignment="Right" Width="4"/>
