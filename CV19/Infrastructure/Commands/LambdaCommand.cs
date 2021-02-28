@@ -6,6 +6,7 @@ using System.Text;
 namespace CV19.Infrastructure.Commands
 {
     //RelayСommand
+    //также бывает тепизированный RelayСommand где object приводится к нужному типу
     internal class LambdaCommand : Command
     {
         //заводим два приватных поля
