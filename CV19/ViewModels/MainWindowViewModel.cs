@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using CV19.Infrastructure.Commands;
+using CV19.Models;
 using CV19.ViewModels.Base;
 namespace CV19.ViewModels
 {
@@ -16,6 +17,10 @@ namespace CV19.ViewModels
             base.Dispose(Disposing);
         }
         */
+        #region Тестовый набор данных для визуализации графиков
+        private IEnumerable<DataPoint> _TestDataPoints;
+        public IEnumerable<DataPoint> TestDataPoints { get => _TestDataPoints; set => Set(ref _TestDataPoints, value); }
+        #endregion
         #region Заголовок окна
         //создаем свойсво имя окна
         //поле для хранения данных
@@ -78,6 +83,14 @@ namespace CV19.ViewModels
             //задаем значения
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecut);
             #endregion
+            var data_points = new List<DataPoint>((int)(360 / 0.1));
+            for(var x= 0d; x<= 360; x+= 0.1)
+            {
+                const double to_rad = Math.PI / 100;
+                var y = Math.Sin(x * to_rad);
+                data_points.Add(new DataPoint { XValue = x, YValue = y });
+            }
+            TestDataPoints = data_points;
         }
     }
 }
