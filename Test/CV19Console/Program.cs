@@ -41,7 +41,8 @@ namespace CV19Console
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 //делаем наш метод генератором
                 //и возвращаем одну строку как результат
-                yield return line;//если бы завести переменную типа массив туда извлек все строки а потом вернул этот массив,это бы заняло место в памяти и если файл будет к примеру 2гигабайта то мы рескуем забиь всю апперативную память
+                //"Korea, north" преобразуем "Korea north" 
+                yield return line.Replace("Korea,","Kores -");//если бы завести переменную типа массив туда извлек все строки а потом вернул этот массив,это бы заняло место в памяти и если файл будет к примеру 2гигабайта то мы рескуем забиь всю апперативную память
                 //в .netfreamwork массивы не могут быть больше 2Gb
             }
         }
@@ -74,6 +75,29 @@ namespace CV19Console
             .Skip(4)
             .Select(s => DateTime.Parse(s, CultureInfo.InvariantCulture))
             .ToArray();
+        //получаем данные по зараженным по каждой стране
+        //применяя этот интерфейс мы можем брать к примеру 10 стран а остальные не будут загружены в память
+        //используем картежи, они позваляют в нужном месте определеть структуру данных с нужным набором свойств
+        //кортеж отличается от анонимного класса тем что это структура она создается на стеке вызова и не требует работы сброшика мусора
+        private static IEnumerable<(string Country, string Province, int[] Counts)> GetData()
+        {
+            //извлекаем общие данные,перечисление всех строк из файла
+            var lines = GetDataLinse()
+                .Skip(1) //пропускаем 1 строку
+                .Select(line => line.Split(','));//каждую строку разбиваем по разделителю ",", получаем что каждый элемент это ячейка таблицы
+                 //преобразуем в нужный кортеж
+            foreach(var row in lines)
+            {
+                //выделяем данные и потом груперуем в кортеж, метод трим будет обрезать лишнее
+                var province = row[0].Trim();
+                var country_name = row[1].Trim(' ', '"');
+                //первые 4 штуки пропускаем(широта долгота название провинции)
+                //.Select(int.Parse)//каждый из элементов превращаем в целоее число
+                var counts = row.Skip(5).Select(int.Parse).ToArray();
+                //возвращаем все данные в виде кортежа
+                yield return (country_name, province, counts);
+            }
+        }
         static void Main(string[] args)
         {
             //старая версия WebClient
@@ -84,10 +108,16 @@ namespace CV19Console
             //var csv_str = response.Content.ReadAsStringAsync().Result;
             //ИСпользеуем наш метод-генератор
             //foreach (var data_line in GetDataLinse())
-            //    Console.WriteLine(data_line);
+            //    Console.WriteLine(string.Join("\r\n", data_line));
             //получаем даты
-            var dates = GetDates();
-            Console.WriteLine(string.Join("\r\n", dates));
+            //var dates = GetDates();
+            //Console.WriteLine(string.Join("\r\n", dates));
+            //работаем с кортежем данных
+            //сначала фильтруем по стране
+            var russia_data = GetData().First(v => v.Country.Equals("Russia", StringComparison.OrdinalIgnoreCase));
+            //затем получаем дату
+            //метод Zip обьеденяе последовательнос из первого элемента с последовательностью из второго, т.е.  GetDates -> (date, count) <-ussia_data.Counts
+            Console.WriteLine(string.Join("\r\n", GetDates().Zip(russia_data.Counts, (date, count) => $"{date:dd:MM} - {count}")));
             Console.ReadLine();
         }
     }
