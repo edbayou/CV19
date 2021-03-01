@@ -21,6 +21,13 @@ namespace CV19.ViewModels
         private IEnumerable<DataPoint> _TestDataPoints;
         public IEnumerable<DataPoint> TestDataPoints { get => _TestDataPoints; set => Set(ref _TestDataPoints, value); }
         #endregion
+        #region Тестовая работа со вкладкой
+        /// <summary>
+        /// номер выбранной вкладки
+        /// </summary>
+        private int _SelectedPageIndex;
+        public int SelectedPageIndex { get => _SelectedPageIndex; set => Set(ref _SelectedPageIndex, value); }
+        #endregion
         #region Заголовок окна
         //создаем свойсво имя окна
         //поле для хранения данных
@@ -58,6 +65,16 @@ namespace CV19.ViewModels
         #endregion
         //создаем команды
         #region Команды
+        #region Тестовая команда управления вкладками
+        public ICommand ChangeTebIndexCommand { get; }
+        private bool CanChangeTebIndexCommandExecut(object p) => true;//в нашем случае команда всегда доступна
+
+        private void OnChangeTebIndexCommandExecuted(object p)
+        {
+            if (p is null) return;
+            SelectedPageIndex += Convert.ToInt32(p);
+        }
+        #endregion
         #region Команда закрытия программы
         //команда закрытия программы
 
@@ -82,6 +99,8 @@ namespace CV19.ViewModels
             #region Команды
             //задаем значения
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecut);
+            //изменение активной вкладки
+            ChangeTebIndexCommand = new LambdaCommand(OnChangeTebIndexCommandExecuted, CanChangeTebIndexCommandExecut);
             #endregion
             var data_points = new List<DataPoint>((int)(360 / 0.1));
             for(var x= 0d; x<= 360; x+= 0.1)

@@ -58,6 +58,12 @@
             <MenuItem Header="Помощь">
                 <MenuItem Header="О программе"></MenuItem>
             </MenuItem>
+            <MenuItem Command="{Binding ChangeTebIndexCommand}" CommandParameter="-1" Header="Влево"></MenuItem>
+            <MenuItem Command="{Binding ChangeTebIndexCommand}" CommandParameter="+1">
+                <MenuItem.Header>
+                    <fa:ImageAwesome Height="12" Icon="Regular_ArrowAltCircleRight"/>
+                </MenuItem.Header>
+            </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem MinWidth="150" MaxWidth="300">
@@ -66,9 +72,11 @@
             <StatusBarItem>
                 <ProgressBar Width="120" Height="14" Value="30"/>
             </StatusBarItem>
+            <StatusBarItem Content="{Binding SelectedPageIndex}">
+            </StatusBarItem>
         </StatusBar>
         <!--так как нам надо растянуть табконтрол на все оставшееся пространство пишем его в конце-->
-        <TabControl>
+        <TabControl SelectedIndex="{Binding SelectedPageIndex}">
            
             <!--<TabItem Header="{Binding TestDataPoints.Count покажет количество точек или  TestDataPoints[2].XValue - покажет значение}" Width="100"></TabItem>-->
             <TabItem Header="График" Width="100">
@@ -81,7 +89,7 @@
                                     DataFieldX="XValue" DataFieldY="YValue"/>
                 </oxy:Plot>
             </TabItem>
-            <TabItem Visibility="Collapsed">
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <!--вставка картинки-->
