@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +19,19 @@ namespace CV19.ViewModels
             base.Dispose(Disposing);
         }
         */
+        #region создаем студентов
+ //коллекция групп
+        public ObservableCollection<Group> Groups { get; }
+        #endregion
+        #region Выбранная группа
+        /// <summary>Выбранная группа</summary>
+        private Group _SelectedGroup;//значение по умолчанию
+        public Group SelectedGroup
+        {
+            get => _SelectedGroup;
+            set => Set(ref _SelectedGroup, value);
+        }
+        #endregion
         #region Тестовый набор данных для визуализации графиков
         private IEnumerable<DataPoint> _TestDataPoints;
         public IEnumerable<DataPoint> TestDataPoints { get => _TestDataPoints; set => Set(ref _TestDataPoints, value); }
@@ -110,6 +125,30 @@ namespace CV19.ViewModels
                 data_points.Add(new DataPoint { XValue = x, YValue = y });
             }
             TestDataPoints = data_points;
+            //определяем создание студентов
+            //создаем переменную
+            var student_index = 1;
+            //создаем колекцию студентов
+            var students = Enumerable.Range(1, 10).Select(i => new Student
+            {
+                Name = $"Name {student_index}",
+                Surname = $"Surname {student_index}",
+                Patronymic = $"Patronymic {student_index++}",
+                Birthday = DateTime.Now,
+                Rating = 0
+            });
+            //создаем пачкой данные чтоб поместить их в колекциюю разом а не по одному например массив или список а потом передать его в конструктор  ObservableCollection<Group>(вот сюда)
+           //создаем перечисление в кол-ве 20 шт и возьмем каждое число и на его основе создадим Группу Group
+            var groups = Enumerable.Range(1, 20).Select(i => new Group
+            {
+                Name = $"Группа {i}",
+                Students = new ObservableCollection<Student>(students)
+            }
+            );
+            Groups = new ObservableCollection<Group>(groups);
+           
+
+
         }
     }
 }
