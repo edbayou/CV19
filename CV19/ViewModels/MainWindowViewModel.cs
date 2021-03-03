@@ -20,8 +20,26 @@ namespace CV19.ViewModels
             base.Dispose(Disposing);
         }
         */
+        //показ разнородных данных
+        public object[] CompositeColection { get; }
+
+
+
+
+        #region Свойство SelectedCompositeValue - Выбранный непонятный элемент 
+        ///<summary> Выбранный непонятный элемент </summary>
+        private object _SelectedCompositeValue;
+
+        public object SelectedCompositeValue { get => _SelectedCompositeValue; set => Set(ref _SelectedCompositeValue, value); }
+        #endregion
+
+
+
+
+
+
         #region создаем студентов
- //коллекция групп
+        //коллекция групп
         public ObservableCollection<Group> Groups { get; }
         #endregion
         #region Выбранная группа
@@ -147,8 +165,18 @@ namespace CV19.ViewModels
             }
             );
             Groups = new ObservableCollection<Group>(groups);
-           
+            
+            
+            var data_list = new List<object>();
 
+
+            data_list.Add("Привет мир");
+            data_list.Add(42);
+            var group = Groups[1];
+
+            data_list.Add(group);
+            data_list.Add(group.Students.First());
+            CompositeColection = data_list.ToArray();
 
         }
     }
