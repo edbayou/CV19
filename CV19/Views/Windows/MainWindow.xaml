@@ -112,25 +112,35 @@
                     <GroupBox Grid.Column="1" Header="{Binding SelectedGroup.Name, FallbackValue='Студенты', TargetNullValue='Группа не выбрана'}">
                         <DataGrid ItemsSource="{Binding SelectedGroup.Students}" 
                                   AutoGenerateColumns="False" 
-                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
                                   GridLinesVisibility="Vertical"
                                   VerticalGridLinesBrush="DarkGray"
                                   AlternatingRowBackground="LightGray">
                             <!--убираем горизантальную линию HorizontalGridLinesBrush="Transparent" == HorizontalGridLinesBrush={x:Null}-->
                             <!--либо второй вариант указываем какие линии надо убрать GridLinesVisibility="Vertical" -->
                                <DataGrid.Columns>
-                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"/>
-                                <DataGridTextColumn Header="Имя"  Binding="{Binding Name}"/>
-                                <DataGridTextColumn Header="Отчество"  Binding="{Binding Patronymic}"/>
-                                <DataGridTextColumn Header="Рейтинг"  Binding="{Binding Rating}"/>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Имя"  Binding="{Binding Name}"  IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Отчество"  Binding="{Binding Patronymic}"  IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Рейтинг"  Binding="{Binding Rating}"  IsReadOnly="True"/>
                                 <!--<DataGridTextColumn Header="Дата рождения"  Binding="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>-->
                                 <DataGridTemplateColumn Header="Дата рождения">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <!--конфигурируем дататемплейт на работу с типом данных DataType="deconat:Student"-->
+                                    <!--<DataGridTemplateColumn.CellTemplate>
+                                        --><!--конфигурируем дататемплейт на работу с типом данных DataType="deconat:Student"--><!--
                                         <DataTemplate DataType="deconat:Student">
                                             <DatePicker SelectedDate="{Binding Birthday}"/>
                                         </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>-->
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Birthday, StringFormat='dd.MM.yyy'}"/>
+                                        </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <DatePicker SelectedDate="{Binding Birthday}"/>
+                                         </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
                                 </DataGridTemplateColumn>
                                 <!--относительный источник данных RelativeSourceчтобы достучаться до данных иерархией выше добираемся до датагрид и задаем датаконтекст-->
                                 <DataGridTextColumn Header="Группы" Binding="{Binding DataContext.SelectedGroup.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
