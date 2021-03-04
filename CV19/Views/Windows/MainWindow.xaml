@@ -88,48 +88,28 @@
                         <ColumnDefinition Width="250"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox>
+                    <GroupBox >
                         <!--задаем заголовок вручную так как применяются наши форматы-->
                         <GroupBox.Header>
                             <TextBlock Text="Элементы"/>
                         </GroupBox.Header>
                         <!--данные ресурсы действуют на содержимое групбокса-->
                         <GroupBox.Resources>
-                            <!--изменение отображение системного типа-->
-                            <DataTemplate DataType="{x:Type sys:Int32}">
-                                <TextBlock Text="{Binding StringFormat=число {0}}"/>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type sys:String}">
-                                <TextBlock>
-                                    <Run Foreground="Red" FontWeight="Bold">Строка:</Run> <TextBlock Text="{Binding}"/>
-                                 </TextBlock>
-                            </DataTemplate> 
-                            <DataTemplate DataType="{x:Type deconat:Group}">
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type deconat:Student}">
-                                <TextBlock Text="{Binding Name, StringFormat='Студент {0}'}"/>
-                            </DataTemplate>
+                            <ResourceDictionary Source="../../Resources/DataTemplates/CompositeListItemsDataTemplates.xaml"/>
                         </GroupBox.Resources>
-                       
+                        <ListBox ItemsSource="{Binding CompositeColection}" SelectedItem="{Binding SelectedCompositeValue}">
+                            <!--коментируем так как перекрывает верхние данные,нижние заданы в ручную-->
+                            <!--<ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>-->
+                        </ListBox>
 
                     </GroupBox>
                     <GroupBox Header="Выбранный элемент" Grid.Column="1">
                         <GroupBox.Resources>
-                            <DataTemplate DataType="{x:Type sys:Int32}">
-                                <TextBlock Text="{Binding StringFormat=число {0}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type sys:String}">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">
-                                    <Run Foreground="Red" FontWeight="Bold">Строка:</Run> <TextBlock Text="{Binding}"/>
-                                 </TextBlock>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type deconat:Group}">
-                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type deconat:Student}">
-                                <TextBlock Text="{Binding Name, StringFormat='Студент {0}'}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
-                            </DataTemplate>
+                            <ResourceDictionary Source="../../Resources/DataTemplates/CompositeItemsControlDataTemplates.xaml"/>
                         </GroupBox.Resources>
                         <ContentControl Content="{Binding SelectedCompositeValue}"/>
                     </GroupBox>
@@ -176,7 +156,7 @@
                                 <!--<Button Content="Добавить" Style="{StaticResource ButtonStyle}" Command="{Binding CreateGroupCommand}"/>-->
                                 <Button Content="Добавить" Command="{Binding CreateGroupCommand}" Style="{StaticResource DangerBtn}"/>
                                 <!--на удаление необходима указать параметрчтобы знать что удалять-->
-                                <Button Content="Удалить" Command="{Binding DeleteGroupCommand}" Style="{StaticResource PrimaryBtn}" CommandParameter="{Binding SelectedGroup}"/>
+                                <Button Content="Удалить" Command="{Binding DeleteGroupCommand}" Style="{StaticResource DangerBtn}" CommandParameter="{Binding SelectedGroup}"/>
                             </UniformGrid>
                             <!--<ListBoxDisplayMemberPath="Name" вместо ToString типа выводит название группы-->
                             <ListBox ItemsSource="{Binding Groups}" SelectedIndex="0"
