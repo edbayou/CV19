@@ -1,0 +1,18 @@
+﻿<!--славарь ресурсов WPF-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:CV19.Resources.Styles">
+    <Style x:Key ="BtnBase" TargetType="ButtonBase">
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style TargetType="Button" BasedOn="{StaticResource BtnBase}">
+        <Setter Property="Background" Value="Red" />
+    </Style>
+    <Style x:Key ="PrimaryBtn" TargetType="Button"  BasedOn="{StaticResource BtnBase}">
+
+    </Style>
+    <Style x:Key ="DangerBtn" TargetType="Button"  BasedOn="{StaticResource BtnBase}">
+        <Setter Property="Background" Value="Yellow" />
+        <Setter Property="Foreground" Value="Green" />
+    </Style>
+</ResourceDictionary>
