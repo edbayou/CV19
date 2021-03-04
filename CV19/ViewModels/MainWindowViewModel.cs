@@ -125,6 +125,35 @@ namespace CV19.ViewModels
            // Application.Current.Shutdown();
         }
         #endregion
+        #region Создание новой группы
+        public ICommand CreateGroupCommand { get; }
+        private bool CanCreateGroupCommandExecut(object p) => true ;
+        private void OnCreateGroupCommandExecuted(object p)
+        {
+            var group_max_index = Groups.Count + 1;
+            var new_group = new Group
+            {
+                Name = $"Группа {group_max_index}",
+                Students = new ObservableCollection<Student>()
+            };
+            Groups.Add(new_group);
+         }
+        #endregion
+        #region Удаление новой группы
+        public ICommand DeleteGroupCommand { get; }
+        private bool CanDeleteGroupCommandExecut(object p) => p is Group group && Groups.Contains(group);//группу мы можем удалить если параметр является Группой и он существует в списке групп
+
+        private void OnDeleteGroupCommandExecuted(object p)
+        {
+
+            if (!(p is Group group)) return;
+            //устанавиливаем индекс на предыдушую позицию от удаленной группы
+            var group_index = Groups.IndexOf(group);
+            Groups.Remove(group);
+            if (group_index < Groups.Count)
+                SelectedGroup = Groups[group_index];
+        }
+        #endregion
         #endregion
         //конструктор для viemodel
         public MainWindowViewModel()
@@ -135,6 +164,9 @@ namespace CV19.ViewModels
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecut);
             //изменение активной вкладки
             ChangeTebIndexCommand = new LambdaCommand(OnChangeTebIndexCommandExecuted, CanChangeTebIndexCommandExecut);
+            //редактирование группы
+            CreateGroupCommand = new LambdaCommand(OnCreateGroupCommandExecuted, CanCreateGroupCommandExecut);
+            DeleteGroupCommand = new LambdaCommand(OnDeleteGroupCommandExecuted, CanDeleteGroupCommandExecut);
             #endregion
             var data_points = new List<DataPoint>((int)(360 / 0.1));
             for(var x= 0d; x<= 360; x+= 0.1)
