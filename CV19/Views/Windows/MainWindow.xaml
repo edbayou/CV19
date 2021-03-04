@@ -28,6 +28,7 @@
     <!--на любом уровне разметки мы можем объявить ресурсы-->
     <Window.Resources>
         <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"></cmd:CloseApplicationCommand>
+       
     </Window.Resources>
     <Window.DataContext>
         <!--дата контекст иерархичский и применяется в зависимости от места объявления если в Window то применяется на все окно-->
@@ -110,14 +111,8 @@
                                 <TextBlock Text="{Binding Name, StringFormat='Студент {0}'}"/>
                             </DataTemplate>
                         </GroupBox.Resources>
-                        <ListBox ItemsSource="{Binding CompositeColection}" SelectedItem="{Binding SelectedCompositeValue}">
-                            <!--коментируем так как перекрывает верхние данные,нижние заданы в ручную-->
-                            <!--<ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>-->
-                        </ListBox>
+                       
+
                     </GroupBox>
                     <GroupBox Header="Выбранный элемент" Grid.Column="1">
                         <GroupBox.Resources>
@@ -169,9 +164,19 @@
                     <GroupBox Grid.Column="0"  Header="Группы">
                         <DockPanel>
                             <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0,3">
-                                <Button Content="Добавить" Margin="0,0,3,0" Command="{Binding CreateGroupCommand}"/>
+                                <UniformGrid.Resources>
+                                    <!--если не указать явно стиль по ключу то он будет применен ко всем кнопкам-->
+                                    <!--<Style x:Key="ButtonStyle" TargetType="Button">-->
+                                    <Style TargetType="Button">
+                                        <Setter Property="Margin" Value="3,0"/>
+                                        <Setter Property="Padding" Value="3,5"/>
+                                        <Setter Property="Background" Value="White"/>
+                                    </Style>
+                                </UniformGrid.Resources>
+                                <!--<Button Content="Добавить" Style="{StaticResource ButtonStyle}" Command="{Binding CreateGroupCommand}"/>-->
+                                <Button Content="Добавить" Command="{Binding CreateGroupCommand}" Style="{StaticResource DangerBtn}"/>
                                 <!--на удаление необходима указать параметрчтобы знать что удалять-->
-                                <Button Content="Удалить" Command="{Binding DeleteGroupCommand}"  CommandParameter="{Binding SelectedGroup}"/>
+                                <Button Content="Удалить" Command="{Binding DeleteGroupCommand}" Style="{StaticResource PrimaryBtn}" CommandParameter="{Binding SelectedGroup}"/>
                             </UniformGrid>
                             <!--<ListBoxDisplayMemberPath="Name" вместо ToString типа выводит название группы-->
                             <ListBox ItemsSource="{Binding Groups}" SelectedIndex="0"
@@ -228,6 +233,13 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Стили кнопок">
+                <Grid>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="162,61,0,0" VerticalAlignment="Top"
+                            Style="{StaticResource DangerBtn}"/>
+
                 </Grid>
             </TabItem>
          </TabControl>
