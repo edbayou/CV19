@@ -28,7 +28,7 @@
     <!--на любом уровне разметки мы можем объявить ресурсы-->
     <Window.Resources>
         <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"></cmd:CloseApplicationCommand>
-       
+
     </Window.Resources>
     <Window.DataContext>
         <!--дата контекст иерархичский и применяется в зависимости от места объявления если в Window то применяется на все окно-->
@@ -105,7 +105,6 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>-->
                         </ListBox>
-
                     </GroupBox>
                     <GroupBox Header="Выбранный элемент" Grid.Column="1">
                         <GroupBox.Resources>
@@ -147,16 +146,28 @@
                                 <UniformGrid.Resources>
                                     <!--если не указать явно стиль по ключу то он будет применен ко всем кнопкам-->
                                     <!--<Style x:Key="ButtonStyle" TargetType="Button">-->
-                                    <Style TargetType="Button">
+                                    <!--<Style TargetType="Button">
                                         <Setter Property="Margin" Value="3,0"/>
                                         <Setter Property="Padding" Value="3,5"/>
                                         <Setter Property="Background" Value="White"/>
-                                    </Style>
+                                    </Style>-->
                                 </UniformGrid.Resources>
                                 <!--<Button Content="Добавить" Style="{StaticResource ButtonStyle}" Command="{Binding CreateGroupCommand}"/>-->
-                                <Button Content="Добавить" Command="{Binding CreateGroupCommand}" Style="{StaticResource DangerBtn}"/>
+                                <!--<Button  Command="{Binding CreateGroupCommand}" Style="{StaticResource DangerBtn}">
+                                   разворачиваем контент
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:ImageAwesome Height="12" Icon="Solid_Check" Foreground="LightGreen" Margin="0,0,3,0">
+                                            <fa:ImageAwesome.Effect>
+                                                <DropShadowEffect ShadowDepth="5"/>
+                                            </fa:ImageAwesome.Effect>
+                                        </fa:ImageAwesome>
+                                        <TextBlock Text="Добавить"/>
+                                    </StackPanel>
+                                </Button>-->
+                                <!--привязываем стили с иконками-->
+                                <Button Content="Добавить" Padding="0,7" Command="{Binding CreateGroupCommand}" Style="{StaticResource CheckButtonStyle}"/>
                                 <!--на удаление необходима указать параметрчтобы знать что удалять-->
-                                <Button Content="Удалить" Command="{Binding DeleteGroupCommand}" Style="{StaticResource DangerBtn}" CommandParameter="{Binding SelectedGroup}"/>
+                                <Button Content="Удалить" Command="{Binding DeleteGroupCommand}" Style="{StaticResource RemuveButtonStyle}" CommandParameter="{Binding SelectedGroup}"/>
                             </UniformGrid>
                             <!--<ListBoxDisplayMemberPath="Name" вместо ToString типа выводит название группы-->
                             <ListBox ItemsSource="{Binding Groups}" SelectedIndex="0"
@@ -182,7 +193,7 @@
                                   AlternatingRowBackground="LightGray">
                             <!--убираем горизантальную линию HorizontalGridLinesBrush="Transparent" == HorizontalGridLinesBrush={x:Null}-->
                             <!--либо второй вариант указываем какие линии надо убрать GridLinesVisibility="Vertical" -->
-                               <DataGrid.Columns>
+                            <DataGrid.Columns>
                                 <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Имя"  Binding="{Binding Name}"  IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Отчество"  Binding="{Binding Patronymic}"  IsReadOnly="True"/>
@@ -190,7 +201,9 @@
                                 <!--<DataGridTextColumn Header="Дата рождения"  Binding="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>-->
                                 <DataGridTemplateColumn Header="Дата рождения">
                                     <!--<DataGridTemplateColumn.CellTemplate>
-                                        --><!--конфигурируем дататемплейт на работу с типом данных DataType="deconat:Student"--><!--
+                                        -->
+                                    <!--конфигурируем дататемплейт на работу с типом данных DataType="deconat:Student"-->
+                                    <!--
                                         <DataTemplate DataType="deconat:Student">
                                             <DatePicker SelectedDate="{Binding Birthday}"/>
                                         </DataTemplate>
@@ -203,7 +216,7 @@
                                     <DataGridTemplateColumn.CellEditingTemplate>
                                         <DataTemplate>
                                             <DatePicker SelectedDate="{Binding Birthday}"/>
-                                         </DataTemplate>
+                                        </DataTemplate>
                                     </DataGridTemplateColumn.CellEditingTemplate>
                                 </DataGridTemplateColumn>
                                 <!--относительный источник данных RelativeSourceчтобы достучаться до данных иерархией выше добираемся до датагрид и задаем датаконтекст-->
@@ -217,12 +230,61 @@
             </TabItem>
             <TabItem Header="Стили кнопок">
                 <Grid>
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="162,61,0,0" VerticalAlignment="Top"
-                            Style="{StaticResource DangerBtn}"/>
-
+                    <!--Style="{StaticResource CheckButtonStyle}"-->
+                    <Button 
+                        
+                            Style="{StaticResource CustomButtonStyle}"
+                            Content="Button" HorizontalAlignment="Left" 
+                            Margin="162,61,0,0" VerticalAlignment="Top" Width="75"
+                            RenderTransformOrigin="0.5,0.5" >
+                        <Button.Background>
+                            <SolidColorBrush Color="White" x:Name="ButtonBrush"/>
+                        </Button.Background>
+                        <Button.RenderTransform>
+                            <RotateTransform x:Name="ButtonRotate"/>
+                        </Button.RenderTransform>
+                        <!--у маиой кнопки татже есть тригеры-->
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <!--запуск анимации, раскадровка-->
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!--From="0" с какого значение меняем по какое To="360" By="0.1"  мажно указать шаг,Duration="0:0:3" длительность ч,м,с-->
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRotate" Storyboard.TargetProperty="Angle"
+                                                         From="0" To="360" By="0.1"  Duration="0:0:1"/>
+                                        <!--можно указать цветовую анимацию ColorAnimation указать начальный и конечный цвет-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Button.MouseEnter">
+                                <!--запуск анимации, раскадровка-->
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!--From="0" с какого значение меняем по какое To="360" By="0.1"  мажно указать шаг,Duration="0:0:3" длительность ч,м,с-->
+                                        <ColorAnimation Storyboard.TargetName="ButtonBrush" Storyboard.TargetProperty="Color"
+                                                        To="Red" Duration="0:0:1"/>
+                                        <!--можно указать цветовую анимацию ColorAnimation указать начальный и конечный цвет-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Button.MouseLeave">
+                                <!--запуск анимации, раскадровка-->
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!--From="0" с какого значение меняем по какое To="360" By="0.1"  мажно указать шаг,Duration="0:0:3" длительность ч,м,с-->
+                                        <ColorAnimation Storyboard.TargetName="ButtonBrush" Storyboard.TargetProperty="Color"
+                                                         To="White" Duration="0:0:1"/>
+                                        <!--можно указать цветовую анимацию ColorAnimation указать начальный и конечный цвет-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    <!--RenderTransformOrigin="0.5,0.5" задаем точку относительно которой будет выполняться анимация
+                    диапазон от 0 до 1-->
                 </Grid>
             </TabItem>
-         </TabControl>
+        </TabControl>
     </DockPanel>
 </Window>
 <!-- кнопка снизу визуального редактора в виде юумажного листа - Отображение всех элементов управления перешелкивая его точки получаешь перезагружешь визуализацию если тупит-->
