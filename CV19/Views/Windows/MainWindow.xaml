@@ -175,10 +175,16 @@
                                 <ListBox.ItemTemplate>
                                     <!--<DataTemplate если данные не отображаются явно указывае тип DataType="decanat:Group"-->
                                     <DataTemplate>
+                                       
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Name}"/>
+                                            <TextBlock Text="{Binding Name}" Name="TextView"/>
                                             <TextBlock Text="{Binding Students.Count, StringFormat=' Студентов: [{0}] '}" Margin="3,0,0,0"/>
                                         </StackPanel>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Students.Count}" Value="0">
+                                                <Setter TargetName="TextView" Property="Foreground" Value="Red"></Setter>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
@@ -187,17 +193,17 @@
                     <GroupBox Grid.Column="1" Header="{Binding SelectedGroup.Name, FallbackValue='Студенты', TargetNullValue='Группа не выбрана'}">
                         <DataGrid ItemsSource="{Binding SelectedGroup.Students}" 
                                   AutoGenerateColumns="False" 
-                                  CanUserAddRows="False"
+                                  CanUserAddRows="True"
                                   GridLinesVisibility="Vertical"
                                   VerticalGridLinesBrush="DarkGray"
                                   AlternatingRowBackground="LightGray">
                             <!--убираем горизантальную линию HorizontalGridLinesBrush="Transparent" == HorizontalGridLinesBrush={x:Null}-->
                             <!--либо второй вариант указываем какие линии надо убрать GridLinesVisibility="Vertical" -->
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Имя"  Binding="{Binding Name}"  IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Отчество"  Binding="{Binding Patronymic}"  IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Рейтинг"  Binding="{Binding Rating}"  IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" IsReadOnly="False"/>
+                                <DataGridTextColumn Header="Имя"  Binding="{Binding Name}"  IsReadOnly="False"/>
+                                <DataGridTextColumn Header="Отчество"  Binding="{Binding Patronymic}"  IsReadOnly="False"/>
+                                <DataGridTextColumn Header="Рейтинг"  Binding="{Binding Rating}"  IsReadOnly="False"/>
                                 <!--<DataGridTextColumn Header="Дата рождения"  Binding="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>-->
                                 <DataGridTemplateColumn Header="Дата рождения">
                                     <!--<DataGridTemplateColumn.CellTemplate>
@@ -280,6 +286,7 @@
                             </EventTrigger>
                         </Button.Triggers>
                     </Button>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="277,51,0,0" VerticalAlignment="Top"/>
                     <!--RenderTransformOrigin="0.5,0.5" задаем точку относительно которой будет выполняться анимация
                     диапазон от 0 до 1-->
                 </Grid>
