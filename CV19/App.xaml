@@ -4,6 +4,27 @@
              xmlns:local="clr-namespace:CV19"
              StartupUri="Views/Windows/MainWindow.xaml">
     <Application.Resources>
-         
+        <!--можно стили вынести сюда и они будут применяться ко всему проекту-->
+        <!--стили могут наследоваться BasedOn-->
+        <!--если таргет тип указать ButtonBase то его ситили можжно применить и к производным от этого класса объектам анпример ToggleButton--><!--
+        <Style x:Key ="BtnBase" TargetType="ButtonBase">
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource BtnBase}">
+            <Setter Property="Background" Value="Red" />
+        </Style>
+        <Style x:Key ="PrimaryBtn" TargetType="Button"  BasedOn="{StaticResource BtnBase}">
+            
+        </Style>
+        <Style x:Key ="DangerBtn" TargetType="Button"  BasedOn="{StaticResource BtnBase}">
+            <Setter Property="Background" Value="Yellow" />
+            <Setter Property="Foreground" Value="Green" />
+        </Style>-->
+        <!--подключаем славарь ресурсов-->
+        <ResourceDictionary >
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Buttons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

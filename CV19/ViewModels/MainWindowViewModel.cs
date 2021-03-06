@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using CV19.Infrastructure.Commands;
 using CV19.Models;
+using CV19.Models.Deconat;
 using CV19.ViewModels.Base;
 namespace CV19.ViewModels
 {
@@ -17,6 +18,37 @@ namespace CV19.ViewModels
             base.Dispose(Disposing);
         }
         */
+        //показ разнородных данных
+        public object[] CompositeColection { get; }
+
+
+
+
+        #region Свойство SelectedCompositeValue - Выбранный непонятный элемент 
+        ///<summary> Выбранный непонятный элемент </summary>
+        private object _SelectedCompositeValue;
+
+        public object SelectedCompositeValue { get => _SelectedCompositeValue; set => Set(ref _SelectedCompositeValue, value); }
+        #endregion
+
+
+
+
+
+
+        #region создаем студентов
+        //коллекция групп
+        public ObservableCollection<Group> Groups { get; }
+        #endregion
+        #region Выбранная группа
+        /// <summary>Выбранная группа</summary>
+        private Group _SelectedGroup;//значение по умолчанию
+        public Group SelectedGroup
+        {
+            get => _SelectedGroup;
+            set => Set(ref _SelectedGroup, value);
+        }
+        #endregion
         #region Тестовый набор данных для визуализации графиков
         private IEnumerable<DataPoint> _TestDataPoints;
         public IEnumerable<DataPoint> TestDataPoints { get => _TestDataPoints; set => Set(ref _TestDataPoints, value); }
@@ -91,6 +123,35 @@ namespace CV19.ViewModels
            // Application.Current.Shutdown();
         }
         #endregion
+        #region Создание новой группы
+        public ICommand CreateGroupCommand { get; }
+        private bool CanCreateGroupCommandExecut(object p) => true ;
+        private void OnCreateGroupCommandExecuted(object p)
+        {
+            var group_max_index = Groups.Count + 1;
+            var new_group = new Group
+            {
+                Name = $"Группа {group_max_index}",
+                Students = new ObservableCollection<Student>()
+            };
+            Groups.Add(new_group);
+         }
+        #endregion
+        #region Удаление новой группы
+        public ICommand DeleteGroupCommand { get; }
+        private bool CanDeleteGroupCommandExecut(object p) => p is Group group && Groups.Contains(group);//группу мы можем удалить если параметр является Группой и он существует в списке групп
+
+        private void OnDeleteGroupCommandExecuted(object p)
+        {
+
+            if (!(p is Group group)) return;
+            //устанавиливаем индекс на предыдушую позицию от удаленной группы
+            var group_index = Groups.IndexOf(group);
+            Groups.Remove(group);
+            if (group_index < Groups.Count)
+                SelectedGroup = Groups[group_index];
+        }
+        #endregion
         #endregion
         //конструктор для viemodel
         public MainWindowViewModel()
@@ -101,6 +162,9 @@ namespace CV19.ViewModels
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecut);
             //изменение активной вкладки
             ChangeTebIndexCommand = new LambdaCommand(OnChangeTebIndexCommandExecuted, CanChangeTebIndexCommandExecut);
+            //редактирование группы
+            CreateGroupCommand = new LambdaCommand(OnCreateGroupCommandExecuted, CanCreateGroupCommandExecut);
+            DeleteGroupCommand = new LambdaCommand(OnDeleteGroupCommandExecuted, CanDeleteGroupCommandExecut);
             #endregion
             var data_points = new List<DataPoint>((int)(360 / 0.1));
             for(var x= 0d; x<= 360; x+= 0.1)
@@ -110,6 +174,40 @@ namespace CV19.ViewModels
                 data_points.Add(new DataPoint { XValue = x, YValue = y });
             }
             TestDataPoints = data_points;
+            //определяем создание студентов
+            //создаем переменную
+            var student_index = 1;
+            //создаем колекцию студентов
+            var students = Enumerable.Range(1, 10).Select(i => new Student
+            {
+                Name = $"Name {student_index}",
+                Surname = $"Surname {student_index}",
+                Patronymic = $"Patronymic {student_index++}",
+                Birthday = DateTime.Now,
+                Rating = 0
+            });
+            //создаем пачкой данные чтоб поместить их в колекциюю разом а не по одному например массив или список а потом передать его в конструктор  ObservableCollection<Group>(вот сюда)
+           //создаем перечисление в кол-ве 20 шт и возьмем каждое число и на его основе создадим Группу Group
+            var groups = Enumerable.Range(1, 20).Select(i => new Group
+            {
+                Name = $"Группа {i}",
+                Students = new ObservableCollection<Student>(students)
+            }
+            );
+            Groups = new ObservableCollection<Group>(groups);
+            
+            
+            var data_list = new List<object>();
+
+
+            data_list.Add("Привет мир");
+            data_list.Add(42);
+            var group = Groups[1];
+
+            data_list.Add(group);
+            data_list.Add(group.Students.First());
+            CompositeColection = data_list.ToArray();
+
         }
     }
 }
