@@ -286,6 +286,7 @@
                             </EventTrigger>
                         </Button.Triggers>
                     </Button>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="277,51,0,0" VerticalAlignment="Top"/>
                     <!--RenderTransformOrigin="0.5,0.5" задаем точку относительно которой будет выполняться анимация
                     диапазон от 0 до 1-->
                 </Grid>
