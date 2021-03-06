@@ -82,50 +82,7 @@
         </StatusBar>
         <!--так как нам надо растянуть табконтрол на все оставшееся пространство пишем его в конце-->
         <TabControl SelectedIndex="{Binding SelectedPageIndex}">
-            <TabItem Header="Разнородные данные" Height="20" VerticalAlignment="Top">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <GroupBox >
-                        <!--задаем заголовок вручную так как применяются наши форматы-->
-                        <GroupBox.Header>
-                            <TextBlock Text="Элементы"/>
-                        </GroupBox.Header>
-                        <!--данные ресурсы действуют на содержимое групбокса-->
-                        <GroupBox.Resources>
-                            <ResourceDictionary Source="../../Resources/DataTemplates/CompositeListItemsDataTemplates.xaml"/>
-                        </GroupBox.Resources>
-                        <ListBox ItemsSource="{Binding CompositeColection}" SelectedItem="{Binding SelectedCompositeValue}">
-                            <!--коментируем так как перекрывает верхние данные,нижние заданы в ручную-->
-                            <!--<ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>-->
-                        </ListBox>
-                    </GroupBox>
-                    <GroupBox Header="Выбранный элемент" Grid.Column="1">
-                        <GroupBox.Resources>
-                            <ResourceDictionary Source="../../Resources/DataTemplates/CompositeItemsControlDataTemplates.xaml"/>
-                        </GroupBox.Resources>
-                        <ContentControl Content="{Binding SelectedCompositeValue}"/>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
-            <!--<TabItem Header="{Binding TestDataPoints.Count покажет количество точек или  TestDataPoints[2].XValue - покажет значение}" Width="100"></TabItem>-->
-            <TabItem Header="График" Width="100">
-                <oxy:Plot>
-                    <oxy:Plot.Axes>
-                        <oxy:LinearAxis Position="Left"/>
-                        <oxy:LinearAxis Position="Bottom"/>
-                    </oxy:Plot.Axes>
-                    <oxy:LineSeries Color="Red" ItemsSource="{Binding TestDataPoints}"
-                                    DataFieldX="XValue" DataFieldY="YValue"/>
-                </oxy:Plot>
-            </TabItem>
-            <TabItem>
+           <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <!--вставка картинки-->
@@ -135,35 +92,16 @@
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <!--<ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="7*"/>-->
                         <ColumnDefinition Width="250"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <GroupBox Grid.Column="0"  Header="Группы">
                         <DockPanel>
+                            <DockPanel DockPanel.Dock="Top" Margin="0,3">
+                                <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
+                                <TextBox/>
+                            </DockPanel>
                             <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0,3">
-                                <UniformGrid.Resources>
-                                    <!--если не указать явно стиль по ключу то он будет применен ко всем кнопкам-->
-                                    <!--<Style x:Key="ButtonStyle" TargetType="Button">-->
-                                    <!--<Style TargetType="Button">
-                                        <Setter Property="Margin" Value="3,0"/>
-                                        <Setter Property="Padding" Value="3,5"/>
-                                        <Setter Property="Background" Value="White"/>
-                                    </Style>-->
-                                </UniformGrid.Resources>
-                                <!--<Button Content="Добавить" Style="{StaticResource ButtonStyle}" Command="{Binding CreateGroupCommand}"/>-->
-                                <!--<Button  Command="{Binding CreateGroupCommand}" Style="{StaticResource DangerBtn}">
-                                   разворачиваем контент
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:ImageAwesome Height="12" Icon="Solid_Check" Foreground="LightGreen" Margin="0,0,3,0">
-                                            <fa:ImageAwesome.Effect>
-                                                <DropShadowEffect ShadowDepth="5"/>
-                                            </fa:ImageAwesome.Effect>
-                                        </fa:ImageAwesome>
-                                        <TextBlock Text="Добавить"/>
-                                    </StackPanel>
-                                </Button>-->
                                 <!--привязываем стили с иконками-->
                                 <Button Content="Добавить" Padding="0,7" Command="{Binding CreateGroupCommand}" Style="{StaticResource CheckButtonStyle}"/>
                                 <!--на удаление необходима указать параметрчтобы знать что удалять-->
@@ -191,7 +129,12 @@
                         </DockPanel>
                     </GroupBox>
                     <GroupBox Grid.Column="1" Header="{Binding SelectedGroup.Name, FallbackValue='Студенты', TargetNullValue='Группа не выбрана'}">
-                        <DataGrid ItemsSource="{Binding SelectedGroup.Students}" 
+                        <DockPanel DockPanel.Dock="Top" Margin="0,3">
+                            <DockPanel DockPanel.Dock="Top" Margin="0,3">
+                                <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
+                                <TextBox/>
+                            </DockPanel>
+                            <DataGrid ItemsSource="{Binding SelectedGroup.Students}" 
                                   AutoGenerateColumns="False" 
                                   CanUserAddRows="True"
                                   GridLinesVisibility="Vertical"
@@ -206,14 +149,7 @@
                                 <DataGridTextColumn Header="Рейтинг"  Binding="{Binding Rating}"  IsReadOnly="False"/>
                                 <!--<DataGridTextColumn Header="Дата рождения"  Binding="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>-->
                                 <DataGridTemplateColumn Header="Дата рождения">
-                                    <!--<DataGridTemplateColumn.CellTemplate>
-                                        -->
-                                    <!--конфигурируем дататемплейт на работу с типом данных DataType="deconat:Student"-->
-                                    <!--
-                                        <DataTemplate DataType="deconat:Student">
-                                            <DatePicker SelectedDate="{Binding Birthday}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>-->
+
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Birthday, StringFormat='dd.MM.yyy'}"/>
@@ -231,66 +167,23 @@
 
                             </DataGrid.Columns>
                         </DataGrid>
+                        </DockPanel>
+                       
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Стили кнопок">
-                <Grid>
-                    <!--Style="{StaticResource CheckButtonStyle}"-->
-                    <Button 
-                        
-                            Style="{StaticResource CustomButtonStyle}"
-                            Content="Button" HorizontalAlignment="Left" 
-                            Margin="162,61,0,0" VerticalAlignment="Top" Width="75"
-                            RenderTransformOrigin="0.5,0.5" >
-                        <Button.Background>
-                            <SolidColorBrush Color="White" x:Name="ButtonBrush"/>
-                        </Button.Background>
-                        <Button.RenderTransform>
-                            <RotateTransform x:Name="ButtonRotate"/>
-                        </Button.RenderTransform>
-                        <!--у маиой кнопки татже есть тригеры-->
-                        <Button.Triggers>
-                            <EventTrigger RoutedEvent="Button.Click">
-                                <!--запуск анимации, раскадровка-->
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <!--From="0" с какого значение меняем по какое To="360" By="0.1"  мажно указать шаг,Duration="0:0:3" длительность ч,м,с-->
-                                        <DoubleAnimation Storyboard.TargetName="ButtonRotate" Storyboard.TargetProperty="Angle"
-                                                         From="0" To="360" By="0.1"  Duration="0:0:1"/>
-                                        <!--можно указать цветовую анимацию ColorAnimation указать начальный и конечный цвет-->
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            <EventTrigger RoutedEvent="Button.MouseEnter">
-                                <!--запуск анимации, раскадровка-->
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <!--From="0" с какого значение меняем по какое To="360" By="0.1"  мажно указать шаг,Duration="0:0:3" длительность ч,м,с-->
-                                        <ColorAnimation Storyboard.TargetName="ButtonBrush" Storyboard.TargetProperty="Color"
-                                                        To="Red" Duration="0:0:1"/>
-                                        <!--можно указать цветовую анимацию ColorAnimation указать начальный и конечный цвет-->
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            <EventTrigger RoutedEvent="Button.MouseLeave">
-                                <!--запуск анимации, раскадровка-->
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <!--From="0" с какого значение меняем по какое To="360" By="0.1"  мажно указать шаг,Duration="0:0:3" длительность ч,м,с-->
-                                        <ColorAnimation Storyboard.TargetName="ButtonBrush" Storyboard.TargetProperty="Color"
-                                                         To="White" Duration="0:0:1"/>
-                                        <!--можно указать цветовую анимацию ColorAnimation указать начальный и конечный цвет-->
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Button.Triggers>
-                    </Button>
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="277,51,0,0" VerticalAlignment="Top"/>
-                    <!--RenderTransformOrigin="0.5,0.5" задаем точку относительно которой будет выполняться анимация
-                    диапазон от 0 до 1-->
-                </Grid>
+            <TabItem Header="График" Width="100" Visibility="Collapsed">
+                <oxy:Plot>
+                    <oxy:Plot.Axes>
+                        <oxy:LinearAxis Position="Left"/>
+                        <oxy:LinearAxis Position="Bottom"/>
+                    </oxy:Plot.Axes>
+                    <oxy:LineSeries Color="Red" ItemsSource="{Binding TestDataPoints}"
+                                    DataFieldX="XValue" DataFieldY="YValue"/>
+                </oxy:Plot>
             </TabItem>
+            
+            
         </TabControl>
     </DockPanel>
 </Window>
