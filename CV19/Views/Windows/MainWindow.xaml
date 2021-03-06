@@ -63,12 +63,7 @@
             <MenuItem Header="Помощь">
                 <MenuItem Header="О программе"></MenuItem>
             </MenuItem>
-            <MenuItem Command="{Binding ChangeTebIndexCommand}" CommandParameter="-1" Header="Влево"></MenuItem>
-            <MenuItem Command="{Binding ChangeTebIndexCommand}" CommandParameter="+1">
-                <MenuItem.Header>
-                    <fa:ImageAwesome Height="12" Icon="Regular_ArrowAltCircleRight"/>
-                </MenuItem.Header>
-            </MenuItem>
+          
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem MinWidth="150" MaxWidth="300">
@@ -97,9 +92,17 @@
                     </Grid.ColumnDefinitions>
                     <GroupBox Grid.Column="0"  Header="Группы">
                         <DockPanel>
+                            <DockPanel.Resources>
+                                <!--реалзует задачи филтрации сортировки групировки данных-->
+                                <CollectionViewSource x:Key="GroupsCollection" 
+                                                      
+                                                      Source="{Binding Groups}"
+                                                      Filter="GroupsCollectionFilter"/>
+                            </DockPanel.Resources>
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
-                                <TextBox/>
+                                <TextBox Name="GroupNameFilterText"
+                                         TextChanged="OnGroupsFilterTextChanged"/>
                             </DockPanel>
                             <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0,3">
                                 <!--привязываем стили с иконками-->
@@ -108,12 +111,12 @@
                                 <Button Content="Удалить" Command="{Binding DeleteGroupCommand}" Style="{StaticResource RemuveButtonStyle}" CommandParameter="{Binding SelectedGroup}"/>
                             </UniformGrid>
                             <!--<ListBoxDisplayMemberPath="Name" вместо ToString типа выводит название группы-->
-                            <ListBox ItemsSource="{Binding Groups}" SelectedIndex="0"
+                            <ListBox ItemsSource="{Binding Source={StaticResource GroupsCollection}}" SelectedIndex="0"
                                      SelectedItem="{Binding SelectedGroup}">
                                 <ListBox.ItemTemplate>
                                     <!--<DataTemplate если данные не отображаются явно указывае тип DataType="decanat:Group"-->
                                     <DataTemplate>
-                                       
+
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Name}" Name="TextView"/>
                                             <TextBlock Text="{Binding Students.Count, StringFormat=' Студентов: [{0}] '}" Margin="3,0,0,0"/>

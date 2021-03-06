@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CV19.Models.Deconat;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,5 +26,30 @@ namespace CV19
             InitializeComponent();
         }
 
+        private void GroupsCollectionFilter(object sender, FilterEventArgs e)
+        {
+            //работает над колекцией и каждый раз вызывает событие
+            //если объект не является группой то ничего не делаем
+            if (!(e.Item is Group group)) return;
+            //группы с пустой ссылкой на имя тоже пропускаем иначе логика сломается
+            if (group.Name is null) return;
+            //если текст фильтра отсутствует то пропускаем все элементы
+            var filter_text = GroupNameFilterText.Text;
+            if (filter_text.Length == 0) return;
+            //сам фильтр
+            //если уже содержится искомый текст то ничего не делаем, ленивая логика
+            if (group.Name.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
+            if(group.Description is null || group.Description.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
+            //если не содержит не в имени ни в описании искомый текст то отбрасываем этот элемент
+            e.Accepted = false;
+        }
+
+        private void OnGroupsFilterTextChanged(object sender, TextChangedEventArgs e)
+        {
+            //достаем по ресурсу
+            var text_box = (TextBox)sender;
+            var collection = (CollectionViewSource)FindResource("GroupsCollection");
+            collection.View.Refresh();
+        }
     }
 }
