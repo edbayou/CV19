@@ -36,6 +36,8 @@ namespace CV19.ViewModels
 
 
 
+
+
         #region создаем студентов
         //коллекция групп
         public ObservableCollection<Group> Groups { get; }
@@ -95,6 +97,12 @@ namespace CV19.ViewModels
             set => Set(ref _Status, value);
         }
         #endregion
+        public IEnumerable<Student> TestStudent => Enumerable.Range(1, App.IsDesignMode ? 10 : 10000)
+            .Select(i => new Student
+            {
+                Name = $"Имя {i}",
+                Surname = $"Фамилия {i}"
+            });
         //создаем команды
         #region Команды
         #region Тестовая команда управления вкладками
