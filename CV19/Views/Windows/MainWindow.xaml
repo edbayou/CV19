@@ -104,6 +104,8 @@
                                 <TextBox Name="GroupNameFilterText"
                                          TextChanged="OnGroupsFilterTextChanged"/>
                             </DockPanel>
+                            <!--Добавляем вертуализацию чтобы визуально не отоброжать все элементы и они не грузили память
+                            т.к. если 1000000 записей каждый будет ждать чтобы его отрендерели что может никогда не произойти плюс навешивается обработчик событий-->
                             <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0,3">
                                 <!--привязываем стили с иконками-->
                                 <Button Content="Добавить" Padding="0,7" Command="{Binding CreateGroupCommand}" Style="{StaticResource CheckButtonStyle}"/>
@@ -111,8 +113,24 @@
                                 <Button Content="Удалить" Command="{Binding DeleteGroupCommand}" Style="{StaticResource RemuveButtonStyle}" CommandParameter="{Binding SelectedGroup}"/>
                             </UniformGrid>
                             <!--<ListBoxDisplayMemberPath="Name" вместо ToString типа выводит название группы-->
+                            <!--у списков исмользуется stacPanel  это дочерний элемент куда кладутся все элементы списка, у других DockPanel 
+                             изменим у списков его контейнер элементов-->
                             <ListBox ItemsSource="{Binding Source={StaticResource GroupsCollection}}" SelectedIndex="0"
-                                     SelectedItem="{Binding SelectedGroup}">
+                                     SelectedItem="{Binding SelectedGroup}"
+                                     VirtualizingPanel.IsContainerVirtualizable="True"
+                                     VirtualizingPanel.IsVirtualizing="True"
+                                     VirtualizingPanel.VirtualizationMode="Recycling">
+                                <!--VirtualizingPanel. указывает как будут работать этот метод, идея заключается в том что она рендерит только те элементы которые видны на экране-->
+                                <!--VirtualizingPanel.VirtualizationMode="Recycling" nтаки образом все контейнеры отображающие текущие элементы заного не создаются а меняется содержимое-->
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <!--помещаем нужную панель-->
+                                        <!--<Grid></Grid>-->
+                                        <!--<UniformGrid></UniformGrid>-->
+                                        <!--для обеспечения виртуализации-->
+                                        <VirtualizingStackPanel/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
                                 <ListBox.ItemTemplate>
                                     <!--<DataTemplate если данные не отображаются явно указывае тип DataType="decanat:Group"-->
                                     <DataTemplate>
