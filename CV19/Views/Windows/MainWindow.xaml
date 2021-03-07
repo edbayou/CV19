@@ -160,8 +160,15 @@
                                   CanUserAddRows="True"
                                   GridLinesVisibility="Vertical"
                                   VerticalGridLinesBrush="DarkGray"
-                                  AlternatingRowBackground="LightGray">
-                            <!--убираем горизантальную линию HorizontalGridLinesBrush="Transparent" == HorizontalGridLinesBrush={x:Null}-->
+                                  AlternatingRowBackground="LightGray"
+                                      EnableRowVirtualization="True">
+                                <DataGrid.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel/>
+                                    </ItemsPanelTemplate>
+                                </DataGrid.ItemsPanel>
+                                <!--EnableRowVirtualization="True" свая собственная виртуализация строк  и колонок-->
+                                <!--убираем горизантальную линию HorizontalGridLinesBrush="Transparent" == HorizontalGridLinesBrush={x:Null}-->
                             <!--либо второй вариант указываем какие линии надо убрать GridLinesVisibility="Vertical" -->
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" IsReadOnly="False"/>
@@ -208,7 +215,21 @@
                     <!--проверка режима разработки
                     <TextBlock Text="{Binding Source={x:Static l:App.IsDesignMode}}"/>-->
                     <ListBox HorizontalAlignment="Left" Width="200" Margin="30"
-                             ItemsSource="{Binding TestStudent}">
+                             ItemsSource="{Binding TestStudent}"
+                        VirtualizingPanel.IsContainerVirtualizable="True"
+                                     VirtualizingPanel.IsVirtualizing="True"
+                                     VirtualizingPanel.VirtualizationMode="Recycling">
+                        <!--VirtualizingPanel. указывает как будут работать этот метод, идея заключается в том что она рендерит только те элементы которые видны на экране-->
+                        <!--VirtualizingPanel.VirtualizationMode="Recycling" nтаки образом все контейнеры отображающие текущие элементы заного не создаются а меняется содержимое-->
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <!--помещаем нужную панель-->
+                                <!--<Grid></Grid>-->
+                                <!--<UniformGrid></UniformGrid>-->
+                                <!--для обеспечения виртуализации-->
+                                <VirtualizingStackPanel/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -216,7 +237,10 @@
                         </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="decanat:Student">
-                                <Border BorderBrush="Blue" BorderThickness="1" CornerRadius="3">
+                                <Border BorderBrush="Blue" BorderThickness="1" CornerRadius="3" Padding="3">
+                                    <Border.CacheMode>
+                                        <BitmapCache RenderAtScale="5"/>
+                                    </Border.CacheMode>
                                     <StackPanel>
                                         <TextBlock Text="{Binding Surname}" ToolTip="{Binding Name}"/>
                                         <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}"/>
