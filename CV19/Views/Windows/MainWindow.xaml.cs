@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace CV19
 {
     /// <summary>
@@ -28,7 +29,7 @@ namespace CV19
         //FilterEventArgs e это параметр,в нем есть сам элемент Items который подвергается филтрации на каждом моменте viewSource т.е. каждый раз вызываает это событие
         private void GroupsCollectionFilter(object sender, FilterEventArgs e)
         {
-            
+
 
             //работает над колекцией и каждый раз вызывает событие
             //если объект не является группой то ничего не делаем

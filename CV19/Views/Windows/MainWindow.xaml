@@ -18,6 +18,7 @@
         xmlns:deconat="clr-namespace:CV19.Models.Deconat"
         xmlns:l="clr-namespace:CV19" 
         xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         Title="{Binding Title}" 
@@ -97,7 +98,16 @@
                                 <CollectionViewSource x:Key="GroupsCollection" 
                                                       
                                                       Source="{Binding Groups}"
-                                                      Filter="GroupsCollectionFilter"/>
+                                                      Filter="GroupsCollectionFilter">
+                                    <CollectionViewSource.SortDescriptions>
+                                     <!--сортировка-->
+                                        <cm:SortDescription PropertyName="Name" Direction="Descending"/>
+                                    </CollectionViewSource.SortDescriptions>
+
+                                    <CollectionViewSource.GroupDescriptions>
+                                        <PropertyGroupDescription PropertyName="Students.Count"/>
+                                    </CollectionViewSource.GroupDescriptions>
+                                </CollectionViewSource>
                             </DockPanel.Resources>
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
@@ -153,15 +163,21 @@
                         <DockPanel DockPanel.Dock="Top" Margin="0,3">
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
-                                <TextBox/>
+                                <!--UpdateSourceTrigger=PropertyChanged обнавляет свойство при изменении свойства текст тексового бокса-->
+                                <TextBox Text="{Binding StudentFilterText, UpdateSourceTrigger=PropertyChanged}"/>
                             </DockPanel>
-                            <DataGrid ItemsSource="{Binding SelectedGroup.Students}" 
+                            <DataGrid ItemsSource="{Binding SelectedGroupStudents}" 
                                   AutoGenerateColumns="False" 
                                   CanUserAddRows="True"
                                   GridLinesVisibility="Vertical"
                                   VerticalGridLinesBrush="DarkGray"
                                   AlternatingRowBackground="LightGray"
-                                      EnableRowVirtualization="True">
+                                      EnableRowVirtualization="True"
+                                      >
+                                <!--для того чтобы объяснить датагриду как отображать сгруперованные данные-->
+                                <!--<DataGrid.GroupStyle>
+                                    <GroupStyle/>
+                                </DataGrid.GroupStyle>-->
                                 <DataGrid.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <VirtualizingStackPanel/>
@@ -210,7 +226,7 @@
                                     DataFieldX="XValue" DataFieldY="YValue"/>
                 </oxy:Plot>
             </TabItem>
-            <TabItem Header="Тестирование визуализации">
+            <TabItem Header="Тестирование визуализации" Visibility="Collapsed">
                 <Grid>
                     <!--проверка режима разработки
                     <TextBlock Text="{Binding Source={x:Static l:App.IsDesignMode}}"/>-->
