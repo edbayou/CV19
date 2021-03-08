@@ -274,6 +274,22 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <GroupBox Grid.Column="0" Header="Дирктории">
+                        <GroupBox.Resources>
+                            <!--задаем шаблон как ресурс-->
+                            <HierarchicalDataTemplate DataType="{x:Type vm:DirectoryViewModel}"
+                                                          ItemsSource="{Binding DirectoryItems}">
+                                <StackPanel Orientation="Horizontal">
+                                    <fa:ImageAwesome Height="12" Icon="Regular_Folder" Foreground="Yellow"/>
+                                    <TextBlock Text="{Binding Name}" ToolTip="{Binding CreationTime}"/>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                            <DataTemplate DataType="{x:Type vm:FileViewModel}">
+                                <StackPanel Orientation="Horizontal" ToolTip="{Binding CreationTime}">
+                                    <fa:ImageAwesome Height="12" Icon="Regular_File" Foreground="Blue"/>
+                                    <TextBlock Text="{Binding Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.Resources>
                         <!--<ListBox ItemsSource="{Binding DiskRootDir.DirectoryItems}"
                                  
                                  SelectedItem="{Binding SelectedDirectoy}"
@@ -286,11 +302,12 @@
                             </ListBox.ItemTemplate>
                         </ListBox>-->
                         <TreeView ItemsSource="{Binding DiskRootDir.DirectoryItems}">
-                            <TreeView.ItemTemplate>
-                                <!--<DataTemplate DataType="vm:DirectoryViewModel">
+                        <!--<TreeView ItemsSource="{Binding DiskRootDir.DirectoryItems}">-->
+                            <!--<TreeView.ItemTemplate>
+                                --><!--<DataTemplate DataType="vm:DirectoryViewModel">
                                     <TextBlock Text="{Binding Name}" ToolTip="{Binding CreationTime}"/>
                                 </DataTemplate>-->
-                                <!--Организуем иерархический шабол отображения данных-->
+                                <!--Организуем иерархический шабол отображения данных--><!--
                                 <HierarchicalDataTemplate DataType="vm:DirectoryViewModel"
                                                           ItemsSource="{Binding DirectoryItems}">
                                     <StackPanel Orientation="Horizontal">
@@ -299,7 +316,7 @@
                                     </StackPanel>
 
                                 </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
+                            </TreeView.ItemTemplate>-->
                             
                         </TreeView>
                     </GroupBox>
