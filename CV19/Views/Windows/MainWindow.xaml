@@ -99,14 +99,13 @@
                                                       
                                                       Source="{Binding Groups}"
                                                       Filter="GroupsCollectionFilter">
-                                    <CollectionViewSource.SortDescriptions>
-                                     <!--сортировка-->
+                                    <!--<CollectionViewSource.SortDescriptions>
+                                     --><!--сортировка--><!--
                                         <cm:SortDescription PropertyName="Name" Direction="Descending"/>
                                     </CollectionViewSource.SortDescriptions>
-
                                     <CollectionViewSource.GroupDescriptions>
                                         <PropertyGroupDescription PropertyName="Students.Count"/>
-                                    </CollectionViewSource.GroupDescriptions>
+                                    </CollectionViewSource.GroupDescriptions>-->
                                 </CollectionViewSource>
                             </DockPanel.Resources>
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
