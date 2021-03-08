@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 using CV19.Infrastructure.Commands;
 using CV19.Models;
 using CV19.Models.Deconat;
 using CV19.ViewModels.Base;
+
 namespace CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
@@ -20,7 +23,7 @@ namespace CV19.ViewModels
         */
         //показ разнородных данных
         public object[] CompositeColection { get; }
-
+        ///Свойства
 
 
 
@@ -30,12 +33,7 @@ namespace CV19.ViewModels
 
         public object SelectedCompositeValue { get => _SelectedCompositeValue; set => Set(ref _SelectedCompositeValue, value); }
         #endregion
-
-
-
-
-
-
+       
         #region создаем студентов
         //коллекция групп
         public ObservableCollection<Group> Groups { get; }
@@ -46,8 +44,74 @@ namespace CV19.ViewModels
         public Group SelectedGroup
         {
             get => _SelectedGroup;
-            set => Set(ref _SelectedGroup, value);
+            //set => Set(ref _SelectedGroup, value);
+            set
+            {
+                //если свойства не изменились то ничего не делаем, в противном случае устанавливаем значение нашего объекта
+                if (!Set(ref _SelectedGroup, value)) return;
+                //подразумеваем что в валуем может оказаться пустая ссылка  value?
+                _SelectedGroupStudents.Source = value?.Students;
+                //попытались уведометь об обнавлении не сработало
+                //_SelectedGroupStudents.View.Refresh();
+                //пробуем такой метод,вызываем событие какое еще свойство изменилось
+                //уведомлям интерфейс что произошли изменения еще гдето во viewmodele
+                OnPropertyChnged(nameof(SelectedGroupStudents));
+            }
         }
+        #endregion
+
+        #region Свойство StudentFilterText : string - Текст фильтров студентов 
+        ///<summary> Текст фильтров студентов </summary>
+        private string _StudentFilterText;
+
+        public string StudentFilterText
+        {
+            get => _StudentFilterText; 
+            set
+            {
+               if(!Set(ref _StudentFilterText, value)) return;
+                _SelectedGroupStudents.View.Refresh();
+            }
+        }
+        #endregion
+
+        #region SelectedGroupStudents и Филтрация студентов 
+
+        //источник данных сразу его создадим один раз , а устанавливать значение Source  объекта _SelectedGroupStudents будем в сетере SelectedGroup
+        //посути представление списка
+        private readonly CollectionViewSource _SelectedGroupStudents = new CollectionViewSource();
+        //создаем метод
+        private void OnStudentFiltred(object sender, FilterEventArgs e)
+        {
+           
+            //если объект не является студентом то ничего не делаем
+            if (!(e.Item is Student student))
+            {
+                e.Accepted = false;
+                return;
+            }
+            var filter_text = _StudentFilterText;
+            //если текст филтра пустой то ничего не делаем
+            if (string.IsNullOrWhiteSpace(filter_text))
+                return;
+            //студента с пустой ссылкой на имя тоже пропускаем иначе логика сломается
+            if (student.Name is null || student.Surname is null || student.Patronymic is null)
+            {
+                e.Accepted = false;
+                return;
+            }
+            //если уже содержится искомый текст то ничего не делаем, ленивая логика
+            if (student.Name.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
+            if (student.Surname.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
+            if (student.Patronymic.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
+            
+            //if (group.Description != null && group.Description.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
+            //если не содержит не в имени ни в описании искомый текст то отбрасываем этот элемент
+            e.Accepted = false;
+        }
+        //свойство будет возвращать тип и View
+        public ICollectionView SelectedGroupStudents => _SelectedGroupStudents?.View;
+
         #endregion
         #region Тестовый набор данных для визуализации графиков
         private IEnumerable<DataPoint> _TestDataPoints;
@@ -57,7 +121,7 @@ namespace CV19.ViewModels
         /// <summary>
         /// номер выбранной вкладки
         /// </summary>
-        private int _SelectedPageIndex;
+        private int _SelectedPageIndex = 0;
         public int SelectedPageIndex { get => _SelectedPageIndex; set => Set(ref _SelectedPageIndex, value); }
         #endregion
         #region Заголовок окна
@@ -95,8 +159,29 @@ namespace CV19.ViewModels
             set => Set(ref _Status, value);
         }
         #endregion
+        #region Создаем тестовых студентов 
+        //в количестве 10000 если у нас запус exe и 10 если рендеринг
+        public IEnumerable<Student> TestStudent => Enumerable.Range(1, App.IsDesignMode ? 10 : 10000)
+            .Select(i => new Student
+            {
+                Name = $"Имя {i}",
+                Surname = $"Фамилия {i}"
+            });
+        #endregion
+        public DirectoryViewModel DiskRootDir { get; } = new DirectoryViewModel("c:\\");
+
+        #region Свойство SelectedDirectoy : DirectoryViewModel - выбранная директория 
+        ///<summary> выбранная директория </summary>
+        private DirectoryViewModel _SelectedDirectoy;
+
+        public DirectoryViewModel SelectedDirectoy { get => _SelectedDirectoy; set => Set(ref _SelectedDirectoy, value); }
+        #endregion
+
+
+
         //создаем команды
         #region Команды
+
         #region Тестовая команда управления вкладками
         public ICommand ChangeTebIndexCommand { get; }
         private bool CanChangeTebIndexCommandExecut(object p) => true;//в нашем случае команда всегда доступна
@@ -207,7 +292,12 @@ namespace CV19.ViewModels
             data_list.Add(group);
             data_list.Add(group.Students.First());
             CompositeColection = data_list.ToArray();
-
+            //добавляем филтр через конструктор
+            _SelectedGroupStudents.Filter += OnStudentFiltred;
+            //можно сортировать по быванию
+            //_SelectedGroupStudents.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Descending));
+            //групировку данных
+            //_SelectedGroupStudents.GroupDescriptions.Add(new PropertyGroupDescription("Name"));
         }
     }
 }
