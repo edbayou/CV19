@@ -159,14 +159,29 @@ namespace CV19.ViewModels
             set => Set(ref _Status, value);
         }
         #endregion
+        #region Создаем тестовых студентов 
+        //в количестве 10000 если у нас запус exe и 10 если рендеринг
         public IEnumerable<Student> TestStudent => Enumerable.Range(1, App.IsDesignMode ? 10 : 10000)
             .Select(i => new Student
             {
                 Name = $"Имя {i}",
                 Surname = $"Фамилия {i}"
             });
+        #endregion
+        public DirectoryViewModel DiskRootDir { get; } = new DirectoryViewModel("c:\\");
+
+        #region Свойство SelectedDirectoy : DirectoryViewModel - выбранная директория 
+        ///<summary> выбранная директория </summary>
+        private DirectoryViewModel _SelectedDirectoy;
+
+        public DirectoryViewModel SelectedDirectoy { get => _SelectedDirectoy; set => Set(ref _SelectedDirectoy, value); }
+        #endregion
+
+
+
         //создаем команды
         #region Команды
+
         #region Тестовая команда управления вкладками
         public ICommand ChangeTebIndexCommand { get; }
         private bool CanChangeTebIndexCommandExecut(object p) => true;//в нашем случае команда всегда доступна

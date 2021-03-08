@@ -267,7 +267,49 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            
+            <TabItem Header="Файловая система">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Column="0" Header="Дирктории">
+                        <!--<ListBox ItemsSource="{Binding DiskRootDir.DirectoryItems}"
+                                 
+                                 SelectedItem="{Binding SelectedDirectoy}"
+                                 SelectedIndex="0">
+                            <ListBox.ItemTemplate>
+                                --><!--добавляем подсказку дата создания--><!--
+                                <DataTemplate DataType="vm:DirectoryViewModel">
+                                    <TextBlock Text="{Binding Name}" ToolTip="{Binding CreationTime}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>-->
+                        <TreeView ItemsSource="{Binding DiskRootDir.DirectoryItems}">
+                            <TreeView.ItemTemplate>
+                                <!--<DataTemplate DataType="vm:DirectoryViewModel">
+                                    <TextBlock Text="{Binding Name}" ToolTip="{Binding CreationTime}"/>
+                                </DataTemplate>-->
+                                <!--Организуем иерархический шабол отображения данных-->
+                                <HierarchicalDataTemplate DataType="vm:DirectoryViewModel"
+                                                          ItemsSource="{Binding DirectoryItems}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:ImageAwesome Height="12" Icon="Regular_Folder" Foreground="Yellow"/>
+                                        <TextBlock Text="{Binding Name}" ToolTip="{Binding CreationTime}"/>
+                                    </StackPanel>
+
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                            
+                        </TreeView>
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Header="Файлы">
+                        <!--<ListBox SelectedItem="{Binding SelectedDirectoy.Files, Mode=OneWay}">
+                            
+                        </ListBox>-->
+                    </GroupBox>
+                </Grid>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>
