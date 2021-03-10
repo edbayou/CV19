@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CV19.Services;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -19,6 +20,9 @@ namespace CV19
         {
             IsDesignMode = false;
             base.OnStartup(e);
+            //вызываем метод сразу в приложении так делать нельзя
+            var service_test = new DataService();
+            var countries = service_test.GetData().ToArray();
         }
     }
 }
