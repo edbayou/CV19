@@ -19,10 +19,16 @@ namespace CV19
         protected override void OnStartup(StartupEventArgs e)
         {
             IsDesignMode = false;
-            base.OnStartup(e);
-            //вызываем метод сразу в приложении так делать нельзя
-            var service_test = new DataService();
-            var countries = service_test.GetData().ToArray();
+            base.OnStartup(e); 
         }
+        /* //для тестироваем подкидывае наши методы прям в запуск программы и с помощью точки остонова смотрим что получилось
+         protected override void OnStartup(StartupEventArgs e)
+         {
+             IsDesignMode = false;
+             base.OnStartup(e);
+             //вызываем метод сразу в приложении так делать нельзя
+             var service_test = new DataService();
+             var countries = service_test.GetData().ToArray();
+         }*/
     }
 }

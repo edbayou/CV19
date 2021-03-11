@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows;
+using System.Threading;
 
 namespace CV19.Services
 {
@@ -31,7 +32,9 @@ namespace CV19.Services
             //для этого получаем поток
             //словили дедлок ).Result т.к. пытаемся работать с асинхронным методом вместе с не асинхронным
             //контекст синхранизации ожидает результата а результат ожидает освобождения конекста синхранизации в результате дедлок
-            using var data_Stream = GetDataStream().Result;//сдесь мы отправляем запрос на сервер вызывая наш метод и http клиент скачает только заголовок ответа,причем тело зависнит либо в сетевой карте либо просто прекратится передача данных, но сам метод вернет на поток из которого мы можем чиать данные побайтно,т.е data_Stream это захват нашего стрима
+            //поэтому GetDataStream().Result запускаем в отдельном потоке (Task)
+            //добавляем еще проверку если контекст синхранизации пустой то просто выполняем метод,в пративном случае формируем Task
+            using var data_Stream = (SynchronizationContext.Current is null ? GetDataStream() : Task.Run(GetDataStream)).Result;//сдесь мы отправляем запрос на сервер вызывая наш метод и http клиент скачает только заголовок ответа,причем тело зависнит либо в сетевой карте либо просто прекратится передача данных, но сам метод вернет на поток из которого мы можем чиать данные побайтно,т.е data_Stream это захват нашего стрима
             //на его основе создать объект который будет читать строковые данные
             using var data_reader = new StreamReader(data_Stream);//задаем этому объекту паток
             //читаем данные пока не встретится конец потока
@@ -68,8 +71,9 @@ namespace CV19.Services
                 //выделяем данные и потом груперуем в кортеж, метод трим будет обрезать лишнее
                 var province = row[0].Trim();
                 var country_name = row[1].Trim(' ', '"');
-                var latitude = double.Parse(row[2]);
-                var longitude = double.Parse(row[3]);
+                
+                var latitude = double.Parse(row[3] == "" ? "0" : row[3], CultureInfo.InvariantCulture);
+                var longitude = double.Parse(row[4] == "" ? "0" : row[4], CultureInfo.InvariantCulture);
                 //первые 4 штуки пропускаем(широта долгота название провинции)
                 //.Select(int.Parse)//каждый из элементов превращаем в целоее число
                 var counts = row.Skip(5).Select(int.Parse).ToArray();

@@ -78,7 +78,11 @@
         </StatusBar>
         <!--так как нам надо растянуть табконтрол на все оставшееся пространство пишем его в конце-->
         <TabControl SelectedIndex="{Binding SelectedPageIndex}">
-           <TabItem>
+            <TabItem Header="Статистика">
+                
+            </TabItem>
+            <!--студенты-->
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <!--вставка картинки-->
@@ -103,7 +107,7 @@
                                      --><!--сортировка--><!--
                                         <cm:SortDescription PropertyName="Name" Direction="Descending"/>
                                     </CollectionViewSource.SortDescriptions>
-                                    <CollectionViewSource.GroupDescriptions>
+                                  <CollectionViewSource.GroupDescriptions>
                                         <PropertyGroupDescription PropertyName="Students.Count"/>
                                     </CollectionViewSource.GroupDescriptions>-->
                                 </CollectionViewSource>
@@ -215,7 +219,7 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="График" Width="100" Visibility="Collapsed">
+            <TabItem Header="График" Width="100">
                 <oxy:Plot>
                     <oxy:Plot.Axes>
                         <oxy:LinearAxis Position="Left"/>
