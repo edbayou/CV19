@@ -47,7 +47,10 @@ namespace CV19.Services
                 //делаем наш метод генератором
                 //и возвращаем одну строку как результат
                 //"Korea, north" преобразуем "Korea north" 
-                yield return line.Replace("Korea,", "Kores -").Replace("Bonaire,","Bonaire -");//если бы завести переменную типа массив туда извлек все строки а потом вернул этот массив,это бы заняло место в памяти и если файл будет к примеру 2гигабайта то мы рескуем забиь всю апперативную память
+/*                if (line.Contains('"'))
+                    line = line.Insert(line.IndexOf(',', line.IndexOf('"')) + 1, " -").Remove(line.IndexOf(',', line.IndexOf('"')), 1);
+                yield return line;*/
+                yield return line.Replace("Korea,", "Kores -").Replace("Bonaire,","Bonaire -").Replace("Helena,", "Helena -");//если бы завести переменную типа массив туда извлек все строки а потом вернул этот массив,это бы заняло место в памяти и если файл будет к примеру 2гигабайта то мы рескуем забиь всю апперативную память
                 //в .netfreamwork массивы не могут быть больше 2Gb
             }
         }
@@ -71,7 +74,9 @@ namespace CV19.Services
                 //выделяем данные и потом груперуем в кортеж, метод трим будет обрезать лишнее
                 var province = row[0].Trim();
                 var country_name = row[1].Trim(' ', '"');
-                
+               /* var latitude = double.TryParse(row[2], out var lat) ? lat : double.NaN;
+                Ну или проще:
+                double.TryParse(row[2], out var latitude);*/
                 var latitude = double.Parse(row[3] == "" ? "0" : row[3], CultureInfo.InvariantCulture);
                 var longitude = double.Parse(row[4] == "" ? "0" : row[4], CultureInfo.InvariantCulture);
                 //первые 4 штуки пропускаем(широта долгота название провинции)

@@ -14,6 +14,8 @@ namespace CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        //создаем вторичную модель в главной
+        private readonly CountriesStatisticViewModel _CountriesStatistic;
         /*
         //при желании можем переопределить Dispose т.к. наследуемся от  ViewModel и он виртуальный
         protected override void Dispose(bool Disposing)
@@ -241,6 +243,8 @@ namespace CV19.ViewModels
         //конструктор для viemodel
         public MainWindowViewModel()
         {
+            //теперь вьюмодели знают друг о друге
+            _CountriesStatistic = new CountriesStatisticViewModel(this);
             //создаем объект нашей команды внутри конструктора
             #region Команды
             //задаем значения

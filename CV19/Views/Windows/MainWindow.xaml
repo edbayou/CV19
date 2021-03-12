@@ -19,6 +19,7 @@
         xmlns:l="clr-namespace:CV19" 
         xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:view="clr-namespace:CV19.Views"
         mc:Ignorable="d"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         Title="{Binding Title}" 
@@ -77,9 +78,9 @@
             </StatusBarItem>
         </StatusBar>
         <!--так как нам надо растянуть табконтрол на все оставшееся пространство пишем его в конце-->
-        <TabControl SelectedIndex="{Binding SelectedPageIndex}">
+        <TabControl SelectedIndex="{Binding SelectedPageIndex}" TabStripPlacement="Bottom">
             <TabItem Header="Статистика">
-                
+                <view:CountryStatisticView/> 
             </TabItem>
             <!--студенты-->
             <TabItem>
