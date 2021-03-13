@@ -7,6 +7,10 @@
 <!--xmlns:fa подключаем иконки-->
 <!--xmlns:deconat="clr-namespace:CV19.Models.Deconat" указывае кде лежат модели во волеженной папке (пространство имен)-->
 <!--xmlns:sys="clr-namespace:System;assembly=System.Runtime" если хотим менять отображение системных типок string int и т.п.-->
+<!--xmlns:d="http://schemas.microsoft.com/expression/blend/2008" предназначин для работы с визуальным редактором в студии и в бленде имеет ряд оьрибутов
+    начинаются с d: сдесь необходимо ууказать датаконтекст 
+    mc:Ignorable="d" указывает компилятору игнарировать данное пространство имен,тк оно нужно иммено для визуализации в студии
+     d:DataContext="{d:DesignInstance vm:CountriesStatisticViewModel}" теперь в кнопке мы сможем увидеть подсказки-->
 <Window x:Class="CV19.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,19 +21,28 @@
         xmlns:vm="clr-namespace:CV19.ViewModels"
         xmlns:deconat="clr-namespace:CV19.Models.Deconat"
         xmlns:l="clr-namespace:CV19" 
-        xmlns:oxy="http://oxyplot.org/wpf"
-        xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:view="clr-namespace:CV19.Views"
-        mc:Ignorable="d"
+        xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        
+        mc:Ignorable="d"
+        
+        
+        
+      
         Title="{Binding Title}" 
-        Height="450" Width="800">
+       
+          Height="450" Width="800"
+        >
+    <!-- DataContext="{vm:MainWindowViewModel}"-->
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CloseApplicationCommand}"/>
     </Window.InputBindings>
+    
     <!--на любом уровне разметки мы можем объявить ресурсы-->
     <Window.Resources>
-        <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"></cmd:CloseApplicationCommand>
+        <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
 
     </Window.Resources>
     <Window.DataContext>
@@ -80,7 +93,8 @@
         <!--так как нам надо растянуть табконтрол на все оставшееся пространство пишем его в конце-->
         <TabControl SelectedIndex="{Binding SelectedPageIndex}" TabStripPlacement="Bottom">
             <TabItem Header="Статистика">
-                <view:CountryStatisticView/> 
+                <!--указываем на вью модель для представления-->
+                <view:CountryStatisticView DataContext="{Binding CountriesStatistic}" /> 
             </TabItem>
             <!--студенты-->
             <TabItem>

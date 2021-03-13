@@ -22,6 +22,6 @@ namespace CV19.Models
             }
             set => _Location = value; 
         }
-        public IEnumerable<ProvinceInfo> ProvinceCounts { get; set; }
+        public IEnumerable<PlaceInfo> ProvinceCounts { get; set; }
     }
 }

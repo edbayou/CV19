@@ -23,6 +23,7 @@
         <!--подключаем славарь ресурсов-->
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
+                <!--<ResourceDictionary Source="Resources/Base/Brushes.xaml"/>-->
                 <ResourceDictionary Source="Resources/Styles/Buttons.xaml"/>
                 <!--добавляем словарь стилей для GridSplitter-->
                 <ResourceDictionary Source="Resources/Styles/GridSplitters.xaml"/>
