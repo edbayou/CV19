@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace CV19
 {
@@ -19,7 +20,12 @@ namespace CV19
         protected override void OnStartup(StartupEventArgs e)
         {
             IsDesignMode = false;
-            base.OnStartup(e); 
+            base.OnStartup(e);
+            /*//на самом деле p:Freeze="true"/ работает так
+            var brush = new SolidColorBrush(Colors.White);
+            brush.Freeze();
+            //и теперь нельзя поменять свойства у этого обьекта brush.Color = Colors.Black; но можно кланировать
+            brush.Clone().Color = Colors.Black;*/
         }
         /* //для тестироваем подкидывае наши методы прям в запуск программы и с помощью точки остонова смотрим что получилось
          protected override void OnStartup(StartupEventArgs e)
@@ -30,5 +36,6 @@ namespace CV19
              var service_test = new DataService();
              var countries = service_test.GetData().ToArray();
          }*/
+
     }
 }

@@ -75,6 +75,7 @@
                     <!--<sys:Double x:Key="Value3">3</sys:Double>-->
 
                     <c:Ratio K="2" x:Key="Ratio2"/>
+                    <c:Linear K="5" B="3" x:Key="Linear_K5_B3"/>
                     <!--<c:Linear K="5" B="{StaticResource Value3}" x:Key="Linear_K5_B3"/>
 
                     <c:CompositeConverter x:Key="TestConverter">
@@ -94,11 +95,14 @@
                 </Grid.RowDefinitions>
                 <GridSplitter VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
                <!--преобразование числла пример-->
-                <Slider Grid.Row="0" Name="ValueSlider"/>
-                <TextBlock Grid.Row="0" Margin="0,30,0,0" 
+                <!--подсказка показывает реальное значение-->
+                <Slider Grid.Row="0" Name="ValueSlider" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
+                <!--<TextBlock Grid.Row="0" Margin="0,30,0,0" 
                            Text="{Binding Value, ElementName=ValueSlider,
-                    Converter = {StaticResource Ratio2}}"/>
-               
+                    Converter = {StaticResource Ratio2}}"/>-->
+                <TextBox Grid.Row="0" Margin="0,30,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200"
+                           Text="{Binding Value, ElementName=ValueSlider,
+                    Converter = {StaticResource Ratio2}, UpdateSourceTrigger=PropertyChanged}"/>
                 <!--<oxy:Plot Grid.Row="0">
                     <oxy:Plot.Axes>
                         <oxy:LinearAxis Position="Left" Title="Число" MajorGridlineStyle="Solid" MinorGridlineStyle="Dash"/>

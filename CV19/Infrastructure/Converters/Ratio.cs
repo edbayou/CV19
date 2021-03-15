@@ -7,7 +7,7 @@ using System.Windows.Markup;
 
 namespace CV19.Infrastructure.Converters
 {
-    class Ratio : IValueConverter
+    class Ratio : Converter
     {
         //определим значение на которое будем домнажать
         //можем указать разметке имя аргумента конструктора тут  Ratio(double K) 
@@ -16,7 +16,7 @@ namespace CV19.Infrastructure.Converters
         //конструкторы
         public Ratio() { }
         public Ratio(double K) => this.K = K;
-        object IValueConverter.Convert(object value, Type t, object p, CultureInfo c)
+        public override object  Convert(object value, Type t, object p, CultureInfo c)
         {
             if (value is null) return null;
             //универсальный клас конвертера System.Convert.
@@ -25,7 +25,7 @@ namespace CV19.Infrastructure.Converters
             return x * K;
         }
 
-        object IValueConverter.ConvertBack(object value, Type t, object p, CultureInfo c)
+        public override object ConvertBack(object value, Type t, object p, CultureInfo c)
         {
             if (value is null) return null;
             var x = System.Convert.ToDouble(value, c);
