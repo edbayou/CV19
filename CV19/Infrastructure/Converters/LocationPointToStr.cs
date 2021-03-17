@@ -5,6 +5,10 @@ using System.Windows;
 
 namespace CV19.Infrastructure.Converters
 {
+    //т.к. в методе Convert используется тип object то дизайнер не всегда может определить чтомы хотим поэтому применияем Атрибут
+    //то что возвращает конвертер return $"Lat:{point.X};lon:{point.Y}"; исполнительной среде не известно,дизайнер не понимает что будет возвращено
+    //можно указать из какого в какой идет конвертация и дизайнер будет понимать что является результатом метода Convert и ConvertBack
+    [ValueConversion(typeof(Point), typeof(string))]
     internal class LocationPointToStr : Converter
     {
         //когда привязка узнает что источник изменился и необходимо изменить целевое свойство
