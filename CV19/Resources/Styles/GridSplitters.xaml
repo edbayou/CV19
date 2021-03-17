@@ -5,7 +5,7 @@
         <!--тоесть происходит одностороннее связвание рисурса к свойству  в момент создания объекта-->
         <!--Value="{DynamicResorce TransparentBrush}"/>  то при изменении TransparentBrush обновится объект
         но приетом само свойство которому мы привязываем занчение должно быть свойством зависимости-->
-        <Setter Property="Background" Value="{StaticResource TransparentBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Panel.ZIndex" Value="10000"/>
         <Style.Triggers>
             <Trigger Property="HorizontalAlignment" Value="Stretch">

@@ -78,8 +78,8 @@
                     <c:Ratio K="2" x:Key="Ratio2"/>
                     <!--<c:Linear K="5" B="3" x:Key="Linear_K5_B3"/>-->
                     <c:Linear K="5" B="{StaticResource Value3}" x:Key="Linear_K5_B3"/>
-
-                    <!--<c:CompositeConverter x:Key="TestConverter">
+<!--утанавливаем два конвертера в одном-->
+                    <c:CompositeConverter x:Key="TestConverter">
                         <c:CompositeConverter.First>
                             <c:Linear K="5"/>
                         </c:CompositeConverter.First>
@@ -88,7 +88,7 @@
                         </c:CompositeConverter.Second>
                     </c:CompositeConverter>
 
-                    <c:ToArray x:Key="ToArrayConverter"/>-->
+                    <!--<c:ToArray x:Key="ToArrayConverter"/>-->
                 </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -103,7 +103,7 @@
                     Converter = {StaticResource Ratio2}}"/>-->
                 <TextBox Grid.Row="0" Margin="0,30,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200"
                            Text="{Binding Value, ElementName=ValueSlider,
-                    Converter = {StaticResource Linear_K5_B3}, UpdateSourceTrigger=PropertyChanged}"/>
+                    Converter = {StaticResource TestConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 <!--<oxy:Plot Grid.Row="0">
                     <oxy:Plot.Axes>
                         <oxy:LinearAxis Position="Left" Title="Число" MajorGridlineStyle="Solid" MinorGridlineStyle="Dash"/>
