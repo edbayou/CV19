@@ -3,7 +3,7 @@
                    xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" >
     <SolidColorBrush x:Key="WhiteBrush" Color="White" p:Freeze="true"/>
     <SolidColorBrush x:Key="RedBrush" Color="Red" p:Freeze="true"/>
-    <SolidColorBrush x:Key="TransparentBrush" Color="Transparent" p:Freeze="true"/> 
+    <SolidColorBrush x:Key="TransparentBrush" Color="Transparent" p:Freeze="true"/>
     <!--SolidColorBrush является наследником freezable класса поэтому его можно заморозить(не изменять) и тогда часть проверок wpf перестает производит и растет производительность-->
 <!--но уже нельзя будет их менять,добовлять анимацию и прщчее, при этом начнут генерироваться исключения-->
 

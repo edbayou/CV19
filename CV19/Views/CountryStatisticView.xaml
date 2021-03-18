@@ -16,6 +16,7 @@
              xmlns:vm="clr-namespace:CV19.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:l="clr-namespace:CV19.Views"
+             xmlns:common="clr-namespace:CV19.Infrastructure.Common"
              xmlns:m="clr-namespace:CV19.Models"
              xmlns:c="clr-namespace:CV19.Infrastructure.Converters"
              d:DataContext="{d:DesignInstance vm:CountriesStatisticViewModel, IsDesignTimeCreatable=True}"
@@ -106,14 +107,15 @@
                            Text="{Binding Value, ElementName=ValueSlider,
                     Converter = {StaticResource TestConverter}, UpdateSourceTrigger=PropertyChanged}"/>-->
                 <StackPanel Grid.Row="0">
-                    <Slider Grid.Row="0" Name="Value1" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
-                    <Slider Grid.Row="0" Name="Value2" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
-                    <Slider Grid.Row="0" Name="Value3" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
-                    <Slider Grid.Row="0" Name="Value4" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
+                    <Slider Name="Value1" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
+                    <Slider Name="Value2" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
+                    <Slider Name="Value3" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
+                    <Slider Name="Value4" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
                 </StackPanel>
-                <ListBox Grid.Row="1">
+                
+                <ListBox Grid.Row="1" ItemsSource="{common:StringTOIntArray Str='1;2;3;4;5'}">
                     <!--сделаем айтемсорс в виде мультибиндинга CompositeCollection-->
-                    <ListBox.ItemsSource>
+                    <!--<ListBox.ItemsSource>
                         <MultiBinding Converter="{StaticResource ToArrayConverter}">
                             <Binding ElementName="Value1" Path="Value"/>
                             <Binding ElementName="Value2" Path="Value"/>
@@ -121,7 +123,8 @@
                             <Binding ElementName="Value4" Path="Value"/>
 
                         </MultiBinding>
-                    </ListBox.ItemsSource>
+                    </ListBox.ItemsSource>-->
+                    
                 </ListBox>
                
                 <!--<oxy:Plot Grid.Row="0">
