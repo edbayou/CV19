@@ -107,15 +107,16 @@
                            Text="{Binding Value, ElementName=ValueSlider,
                     Converter = {StaticResource TestConverter}, UpdateSourceTrigger=PropertyChanged}"/>-->
                 <StackPanel Grid.Row="0">
-                    <Slider Name="Value1" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
-                    <Slider Name="Value2" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
-                    <Slider Name="Value3" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
-                    <Slider Name="Value4" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>
+                    <!--//теперь конвертер стал расширением разметки но он создается каждый раз и если их  много то не надо так делать-->
+                    <Slider Name="Value1" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:Linear 5}}"/>
+                    <Slider Name="Value2" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:CompositeConverter First={c:Add 5},Second={c:Ratio 7}}}"/>
+                    <Slider Name="Value3" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:CompositeConverter {c:Linear 5, 7}, {c:Add 7}}}"/>
+                    <Slider Name="Value4" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:CompositeConverter {c:Linear 5, 7}, {c:CompositeConverter {c:Add 5},{c:Ratio 7}}}}"/>
                 </StackPanel>
-                
-                <ListBox Grid.Row="1" ItemsSource="{common:StringTOIntArray Str='1;2;3;4;5'}">
-                    <!--сделаем айтемсорс в виде мультибиндинга CompositeCollection-->
-                    <!--<ListBox.ItemsSource>
+                <Border  Grid.Row="1"  DataContext="{common:StringTOIntArray Str='1;2;3;4;5'}">
+                    <ListBox ItemsSource="{Binding}">
+                        <!--сделаем айтемсорс в виде мультибиндинга CompositeCollection-->
+                        <!--<ListBox.ItemsSource>
                         <MultiBinding Converter="{StaticResource ToArrayConverter}">
                             <Binding ElementName="Value1" Path="Value"/>
                             <Binding ElementName="Value2" Path="Value"/>
@@ -124,8 +125,10 @@
 
                         </MultiBinding>
                     </ListBox.ItemsSource>-->
-                    
-                </ListBox>
+
+                    </ListBox>
+                </Border>
+             
                
                 <!--<oxy:Plot Grid.Row="0">
                     <oxy:Plot.Axes>

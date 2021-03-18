@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace CV19.Infrastructure.Converters
 {
@@ -9,6 +10,7 @@ namespace CV19.Infrastructure.Converters
     //то что возвращает конвертер return $"Lat:{point.X};lon:{point.Y}"; исполнительной среде не известно,дизайнер не понимает что будет возвращено
     //можно указать из какого в какой идет конвертация и дизайнер будет понимать что является результатом метода Convert и ConvertBack
     [ValueConversion(typeof(Point), typeof(string))]
+    [MarkupExtensionReturnType(typeof(LocationPointToStr))]
     internal class LocationPointToStr : Converter
     {
         //когда привязка узнает что источник изменился и необходимо изменить целевое свойство

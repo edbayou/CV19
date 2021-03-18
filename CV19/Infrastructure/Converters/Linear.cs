@@ -9,6 +9,7 @@ namespace CV19.Infrastructure.Converters
     /// <summary> реализация линейного преобразования f(x) = k *x + b </summary>
     //можно указать из какого в какой идет конвертация и дизайнер будет понимать что является результатом метода Convert и ConvertBack
     [ValueConversion(typeof(double), typeof(double))]
+    [MarkupExtensionReturnType(typeof(Linear))] //тогда в разметке будут видн свойства, хотя они и так сейчас видны
     internal class Linear : Converter
     {
 

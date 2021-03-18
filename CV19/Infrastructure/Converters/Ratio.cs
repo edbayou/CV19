@@ -7,6 +7,7 @@ using System.Windows.Markup;
 
 namespace CV19.Infrastructure.Converters
 {
+    [MarkupExtensionReturnType(typeof(Ratio))]
     class Ratio : Converter
     {
         //определим значение на которое будем домнажать
@@ -32,4 +33,6 @@ namespace CV19.Infrastructure.Converters
             return x / K;
         }
     }
+
+   
 }
