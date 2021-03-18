@@ -9,9 +9,12 @@ using CV19.Infrastructure.Commands;
 using CV19.Models;
 using CV19.Models.Deconat;
 using CV19.ViewModels.Base;
+using System.Windows.Markup;
+using System.Windows;
 
 namespace CV19.ViewModels
 {
+    [MarkupExtensionReturnType(typeof(MainWindowViewModel))]
     internal class MainWindowViewModel : ViewModel
     {
         //создаем вторичную модель в главной
@@ -209,7 +212,9 @@ namespace CV19.ViewModels
         private void OnCloseApplicationCommandExecuted(object p)
         {
             //выполняется когда команда выполняется
-           // Application.Current.Shutdown();
+            // Application.Current.Shutdown();
+            //теперь можем управлять окном через мягкую ссылку
+          (RootObject as Window)?.Close();
         }
         #endregion
         #region Создание новой группы

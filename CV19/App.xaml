@@ -23,12 +23,13 @@
         <!--подключаем славарь ресурсов-->
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
+                <!--подключаем кисти чтобы они не загружались каждый раз при каждом вызове и не жрали память и задаем их в кнопке {StaticResource WhiteBrush}-->
+                <ResourceDictionary Source="Resources/Base/Brushes.xaml"/>
                 <!--<ResourceDictionary Source="Resources/Base/Brushes.xaml"/>-->
                 <ResourceDictionary Source="Resources/Styles/Buttons.xaml"/>
                 <!--добавляем словарь стилей для GridSplitter-->
                 <ResourceDictionary Source="Resources/Styles/GridSplitters.xaml"/>
-                <!--подключаем кисти чтобы они не загружались каждый раз при каждом вызове и не жрали память и задаем их в кнопке {StaticResource WhiteBrush}-->
-                <ResourceDictionary Source="Resources/Base/Brushes.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

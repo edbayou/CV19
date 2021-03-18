@@ -29,7 +29,7 @@
         mc:Ignorable="d"
         
         
-        
+        DataContext="{vm:MainWindowViewModel}"
       
         Title="{Binding Title}" 
        
@@ -45,10 +45,11 @@
         <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
 
     </Window.Resources>
-    <Window.DataContext>
-        <!--дата контекст иерархичский и применяется в зависимости от места объявления если в Window то применяется на все окно-->
+    <!--тк viewmodel наследуем от MarkupExtension можем задать контекст в <Window ...>-->
+    <!--<Window.DataContext>
+        дата контекст иерархичский и применяется в зависимости от места объявления если в Window то применяется на все окно
         <vm:MainWindowViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
     <!--<Grid>
         UpdateSourceTrigger=PropertyChanged обнавляет элемент при изменении
         <TextBox HorizontalAlignment="Left" 
@@ -73,7 +74,8 @@
                 </MenuItem>
             </MenuItem>-->
                 <!--используем команду как ресурс-->
-                <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"/>
+                <!--<MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"/>-->
+                <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>
             </MenuItem>
             <MenuItem Header="Помощь">
                 <MenuItem Header="О программе"></MenuItem>
