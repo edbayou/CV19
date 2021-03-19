@@ -9,11 +9,18 @@ using CV19.Infrastructure.Commands;
 using CV19.Models;
 using CV19.Models.Deconat;
 using CV19.ViewModels.Base;
+using System.Windows.Markup;
+using System.Windows;
 
 namespace CV19.ViewModels
 {
+    [MarkupExtensionReturnType(typeof(MainWindowViewModel))]
     internal class MainWindowViewModel : ViewModel
     {
+        //создаем вторичную модель в главной
+        //private readonly CountriesStatisticViewModel _CountriesStatistic;
+        //превратили в свойство
+        public CountriesStatisticViewModel CountriesStatistic { get; }
         /*
         //при желании можем переопределить Dispose т.к. наследуемся от  ViewModel и он виртуальный
         protected override void Dispose(bool Disposing)
@@ -205,7 +212,9 @@ namespace CV19.ViewModels
         private void OnCloseApplicationCommandExecuted(object p)
         {
             //выполняется когда команда выполняется
-           // Application.Current.Shutdown();
+            // Application.Current.Shutdown();
+            //теперь можем управлять окном через мягкую ссылку
+          (RootObject as Window)?.Close();
         }
         #endregion
         #region Создание новой группы
@@ -241,6 +250,10 @@ namespace CV19.ViewModels
         //конструктор для viemodel
         public MainWindowViewModel()
         {
+            //теперь вьюмодели знают друг о друге передумали
+            //_CountriesStatistic = new CountriesStatisticViewModel(this);
+            //и сделали так
+            CountriesStatistic = new CountriesStatisticViewModel(this);
             //создаем объект нашей команды внутри конструктора
             #region Команды
             //задаем значения

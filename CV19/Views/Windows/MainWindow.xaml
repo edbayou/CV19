@@ -7,6 +7,10 @@
 <!--xmlns:fa подключаем иконки-->
 <!--xmlns:deconat="clr-namespace:CV19.Models.Deconat" указывае кде лежат модели во волеженной папке (пространство имен)-->
 <!--xmlns:sys="clr-namespace:System;assembly=System.Runtime" если хотим менять отображение системных типок string int и т.п.-->
+<!--xmlns:d="http://schemas.microsoft.com/expression/blend/2008" предназначин для работы с визуальным редактором в студии и в бленде имеет ряд оьрибутов
+    начинаются с d: сдесь необходимо ууказать датаконтекст 
+    mc:Ignorable="d" указывает компилятору игнарировать данное пространство имен,тк оно нужно иммено для визуализации в студии
+     d:DataContext="{d:DesignInstance vm:CountriesStatisticViewModel}" теперь в кнопке мы сможем увидеть подсказки-->
 <Window x:Class="CV19.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,24 +21,35 @@
         xmlns:vm="clr-namespace:CV19.ViewModels"
         xmlns:deconat="clr-namespace:CV19.Models.Deconat"
         xmlns:l="clr-namespace:CV19" 
+        xmlns:view="clr-namespace:CV19.Views"
         xmlns:oxy="http://oxyplot.org/wpf"
-        xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        mc:Ignorable="d"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        
+        mc:Ignorable="d"
+        
+        
+        DataContext="{vm:MainWindowViewModel}"
+      
         Title="{Binding Title}" 
-        Height="450" Width="800">
+       
+          Height="450" Width="800"
+        >
+    <!-- DataContext="{vm:MainWindowViewModel}"-->
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CloseApplicationCommand}"/>
     </Window.InputBindings>
+    
     <!--на любом уровне разметки мы можем объявить ресурсы-->
     <Window.Resources>
-        <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"></cmd:CloseApplicationCommand>
+        <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
 
     </Window.Resources>
-    <Window.DataContext>
-        <!--дата контекст иерархичский и применяется в зависимости от места объявления если в Window то применяется на все окно-->
+    <!--тк viewmodel наследуем от MarkupExtension можем задать контекст в <Window ...>-->
+    <!--<Window.DataContext>
+        дата контекст иерархичский и применяется в зависимости от места объявления если в Window то применяется на все окно
         <vm:MainWindowViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
     <!--<Grid>
         UpdateSourceTrigger=PropertyChanged обнавляет элемент при изменении
         <TextBox HorizontalAlignment="Left" 
@@ -60,6 +75,7 @@
             </MenuItem>-->
                 <!--используем команду как ресурс-->
                 <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"/>
+                <!--<MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>-->
             </MenuItem>
             <MenuItem Header="Помощь">
                 <MenuItem Header="О программе"></MenuItem>
@@ -77,8 +93,13 @@
             </StatusBarItem>
         </StatusBar>
         <!--так как нам надо растянуть табконтрол на все оставшееся пространство пишем его в конце-->
-        <TabControl SelectedIndex="{Binding SelectedPageIndex}">
-           <TabItem>
+        <TabControl SelectedIndex="{Binding SelectedPageIndex}" TabStripPlacement="Bottom">
+            <TabItem Header="Статистика">
+                <!--указываем на вью модель для представления-->
+                <view:CountryStatisticView DataContext="{Binding CountriesStatistic}" /> 
+            </TabItem>
+            <!--студенты-->
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <!--вставка картинки-->
@@ -103,7 +124,7 @@
                                      --><!--сортировка--><!--
                                         <cm:SortDescription PropertyName="Name" Direction="Descending"/>
                                     </CollectionViewSource.SortDescriptions>
-                                    <CollectionViewSource.GroupDescriptions>
+                                  <CollectionViewSource.GroupDescriptions>
                                         <PropertyGroupDescription PropertyName="Students.Count"/>
                                     </CollectionViewSource.GroupDescriptions>-->
                                 </CollectionViewSource>
@@ -215,7 +236,7 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="График" Width="100" Visibility="Collapsed">
+            <TabItem Header="График" Width="100">
                 <oxy:Plot>
                     <oxy:Plot.Axes>
                         <oxy:LinearAxis Position="Left"/>

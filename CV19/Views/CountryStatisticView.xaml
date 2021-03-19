@@ -1,0 +1,161 @@
+﻿<!--
+    xmlns:common="clr-namespace:CV19.Infrastructure.Common"
+    xmlns:c="clr-namespace:CV19.Infrastructure.Converters" подключаем наш конвертер
+    xmlns:m="clr-namespace:CV19.Models"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime" добавляем для того чтобы дизайнер отображал то что обычно не отображает
+             xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:map="clr-namespace:MapControl;assembly=MapControl.WPF" данный пакет отображает карту
+    -->
+    
+    <UserControl x:Class="CV19.Views.CountryStatisticView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
+             xmlns:vm="clr-namespace:CV19.ViewModels"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             xmlns:l="clr-namespace:CV19.Views"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:common="clr-namespace:CV19.Infrastructure.Common"
+             xmlns:m="clr-namespace:CV19.Models"
+             xmlns:c="clr-namespace:CV19.Infrastructure.Converters"
+             xmlns:map="clr-namespace:MapControl;assembly=MapControl.WPF"
+             d:DataContext="{d:DesignInstance vm:CountriesStatisticViewModel, IsDesignTimeCreatable=True}"
+
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <c:LocationPointToStr x:Key="LocationConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GridSplitter Panel.ZIndex="1000"/>
+        <GroupBox Grid.Column="0" Header="Список стран">
+            <DockPanel>
+                <Button DockPanel.Dock="Top"  Command="{Binding RefreshDataCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Height="12" Icon="Solid_ArrowDown" Margin="0,0,3,0"/>
+                        <TextBlock Text="Загрузить данные"/>
+                    </StackPanel>
+                </Button>
+                <ListBox ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}">
+                    <!--указываем как мы хотим видеть каждую страну в списке-->
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="m:CountryInfo">
+                            <!--статическое объявление конвертера, вынесли выше т.к. тут глючит--><!--
+                            <DataTemplate.Resources>
+                                <c:LocationPointToStr x:Key="LocationConverter"/>
+                            </DataTemplate.Resources>-->
+                            <TextBlock>
+                                <!--выводим имена-->
+                                <TextBlock Text="{Binding Name}"/>
+                                <!--смотрим как работают конвертеры которые могут модифицыровать значения которые передаются в кчестве параметра Text="{Binding Name}"-->
+                                  <!--есть элемент Converter которому надо передать тип IValueCinverter для этого нужно создать класс который 
+                                будет реализовывать этот ип и в нем мы пишем логику как хотим форматировать данные-->
+                                <TextBlock Text="{Binding Location, Converter={StaticResource LocationConverter}, StringFormat=({0})}"/>
+                                <!--но при этом сколько есть стран столько будет объектов конвертации данных (внизу)поэтому их выводят в статические ресурсы (вверху)-->
+                                <!--<TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding Path="Location" StringFormat="({0})">
+                                            <Binding.Converter>
+                                                <c:LocationPointToStr/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </TextBlock.Text>
+                                </TextBlock>-->
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel> 
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Информация">
+            <Grid>
+                <Grid.Resources>
+                    <sys:Double x:Key="Value3">3</sys:Double>
+
+                    <c:Ratio K="2" x:Key="Ratio2"/>
+                    <!--<c:Linear K="5" B="3" x:Key="Linear_K5_B3"/>-->
+                    <c:Linear K="5" B="{StaticResource Value3}" x:Key="Linear_K5_B3"/>
+<!--утанавливаем два конвертера в одном-->
+                    <c:CompositeConverter x:Key="TestConverter">
+                        <c:CompositeConverter.First>
+                            <c:Linear K="5"/>
+                        </c:CompositeConverter.First>
+                        <c:CompositeConverter.Second>
+                            <c:Linear K="-3" B="10"/>
+                        </c:CompositeConverter.Second>
+                    </c:CompositeConverter>
+<!--мультиконвертер-->
+                    <c:ToArray x:Key="ToArrayConverter"/>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <GridSplitter VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
+               <!--преобразование числла пример-->
+                <!--подсказка показывает реальное значение-->
+                <!--<Slider Grid.Row="0" Name="ValueSlider" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}"/>-->
+                <!--<TextBlock Grid.Row="0" Margin="0,30,0,0" 
+                           Text="{Binding Value, ElementName=ValueSlider,
+                    Converter = {StaticResource Ratio2}}"/>-->
+                <!--проверка конвертации-->
+                <!--<TextBox Grid.Row="0" Margin="0,30,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200"
+                           Text="{Binding Value, ElementName=ValueSlider,
+                    Converter = {StaticResource TestConverter}, UpdateSourceTrigger=PropertyChanged}"/>-->
+                <StackPanel Grid.Row="0">
+                    <!--//теперь конвертер стал расширением разметки но он создается каждый раз и если их  много то не надо так делать-->
+                    <Slider Name="Value1" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:Linear 5}}"/>
+                    <Slider Name="Value2" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:CompositeConverter First={c:Add 5},Second={c:Ratio 7}}}"/>
+                    <Slider Name="Value3" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:CompositeConverter {c:Linear 5, 7}, {c:Add 7}}}"/>
+                    <Slider Name="Value4" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:CompositeConverter {c:Linear 5, 7}, {c:CompositeConverter {c:Add 5},{c:Ratio 7}}}}"/>
+                </StackPanel>
+                <Border  Grid.Row="1"  DataContext="{common:StringTOIntArray Str='1;2;3;4;5'}">
+                    <ListBox ItemsSource="{Binding}">
+                        <!--сделаем айтемсорс в виде мультибиндинга CompositeCollection-->
+                        <!--<ListBox.ItemsSource>
+                        <MultiBinding Converter="{StaticResource ToArrayConverter}">
+                            <Binding ElementName="Value1" Path="Value"/>
+                            <Binding ElementName="Value2" Path="Value"/>
+                            <Binding ElementName="Value3" Path="Value"/>
+                            <Binding ElementName="Value4" Path="Value"/>
+
+                        </MultiBinding>
+                    </ListBox.ItemsSource>-->
+
+                    </ListBox>
+                </Border>
+             
+               <!--вывод графика-->
+                <oxy:Plot Grid.Row="0">
+                    <oxy:Plot.Axes>
+                        <oxy:LinearAxis Position="Left" Title="Число" MajorGridlineStyle="Solid" MinorGridlineStyle="Dash"/>
+                        <oxy:DateTimeAxis Position="Bottom" Title="Дата" MajorGridlineStyle="Solid" MinorGridlineStyle="Dash"/>
+                    </oxy:Plot.Axes>
+                    <!--данные сумарное количество случаев для каждой страны для каждой даты-->
+                    
+                    <oxy:LineSeries StrokeThickness="2" Color="Red" 
+                                    ItemsSource="{Binding SelectedCountry.Counts}"
+                                    DataFieldX="Date" DataFieldY="Count"/>
+                </oxy:Plot>
+<!--конвертер Point в понятные для карты данные-->
+                <map:Map Grid.Row="1" ZoomLevel="4" MaxZoomLevel="21" Center="{Binding SelectedCountry.Location, Converter={c:PointToMapLocation}}">
+                    <!--<map:Map Grid.Row="1" ZoomLevel="4" MaxZoomLevel="21" Center="55.75,73.64">-->
+                        <!--отображаем маштаб в левом верхнем углу-->
+                    <map:MapScale Margin="4" Opacity="1" Background="Transparent" VerticalAlignment="Bottom"/>
+                    <!--сетка-->
+                    <map:MapGraticule Opacity="0.3" Background="Transparent"/>
+                    <map:Map.MapLayer>
+                        <!--<map:MapTileLayer TileSource="https://{c}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"/>-->
+                        <map:MapTileLayer TileSource="http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png"/>
+                    </map:Map.MapLayer>
+                </map:Map>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
