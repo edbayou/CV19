@@ -4,7 +4,7 @@
     xmlns:m="clr-namespace:CV19.Models"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime" добавляем для того чтобы дизайнер отображал то что обычно не отображает
              xmlns:oxy="http://oxyplot.org/wpf"
-             xmlns:map="clr-namespace:MapControl;assembly=MapControl.WPF"
+             xmlns:map="clr-namespace:MapControl;assembly=MapControl.WPF" данный пакет отображает карту
     -->
     
     <UserControl x:Class="CV19.Views.CountryStatisticView"
@@ -20,6 +20,7 @@
              xmlns:common="clr-namespace:CV19.Infrastructure.Common"
              xmlns:m="clr-namespace:CV19.Models"
              xmlns:c="clr-namespace:CV19.Infrastructure.Converters"
+             xmlns:map="clr-namespace:MapControl;assembly=MapControl.WPF"
              d:DataContext="{d:DesignInstance vm:CountriesStatisticViewModel, IsDesignTimeCreatable=True}"
 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -142,13 +143,18 @@
                                     ItemsSource="{Binding SelectedCountry.Counts}"
                                     DataFieldX="Date" DataFieldY="Count"/>
                 </oxy:Plot>
-                <!--<map:Map Grid.Row="1" ZoomLevel="4" MaxZoomLevel="21" Center="{Binding SelectedCountry.Location, Converter={c:PointToMapLocation}}">
+<!--конвертер Point в понятные для карты данные-->
+                <map:Map Grid.Row="1" ZoomLevel="4" MaxZoomLevel="21" Center="{Binding SelectedCountry.Location, Converter={c:PointToMapLocation}}">
+                    <!--<map:Map Grid.Row="1" ZoomLevel="4" MaxZoomLevel="21" Center="55.75,73.64">-->
+                        <!--отображаем маштаб в левом верхнем углу-->
                     <map:MapScale Margin="4" Opacity="1" Background="Transparent" VerticalAlignment="Bottom"/>
+                    <!--сетка-->
                     <map:MapGraticule Opacity="0.3" Background="Transparent"/>
                     <map:Map.MapLayer>
+                        <!--<map:MapTileLayer TileSource="https://{c}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"/>-->
                         <map:MapTileLayer TileSource="http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png"/>
                     </map:Map.MapLayer>
-                </map:Map>-->
+                </map:Map>
             </Grid>
         </GroupBox>
     </Grid>
