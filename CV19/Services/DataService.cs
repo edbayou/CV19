@@ -97,7 +97,7 @@ namespace CV19.Services
                 var country = new CountryInfo()
                 {
                     Name = country_info.Key,
-                    ProvinceCounts = country_info.Select(c => new ProvinceInfo
+                    Provinces = country_info.Select(c => new ProvinceInfo
                     {
                         Name = c.Province,
                         Location = new Point(c.Place.Lat, c.Place.Lon),

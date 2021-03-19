@@ -74,8 +74,8 @@
                 </MenuItem>
             </MenuItem>-->
                 <!--используем команду как ресурс-->
-                <!--<MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"/>-->
-                <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>
+                <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"/>
+                <!--<MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>-->
             </MenuItem>
             <MenuItem Header="Помощь">
                 <MenuItem Header="О программе"></MenuItem>

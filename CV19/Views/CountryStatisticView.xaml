@@ -16,6 +16,7 @@
              xmlns:vm="clr-namespace:CV19.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:l="clr-namespace:CV19.Views"
+             xmlns:oxy="http://oxyplot.org/wpf"
              xmlns:common="clr-namespace:CV19.Infrastructure.Common"
              xmlns:m="clr-namespace:CV19.Models"
              xmlns:c="clr-namespace:CV19.Infrastructure.Converters"
@@ -129,17 +130,19 @@
                     </ListBox>
                 </Border>
              
-               
-                <!--<oxy:Plot Grid.Row="0">
+               <!--вывод графика-->
+                <oxy:Plot Grid.Row="0">
                     <oxy:Plot.Axes>
                         <oxy:LinearAxis Position="Left" Title="Число" MajorGridlineStyle="Solid" MinorGridlineStyle="Dash"/>
                         <oxy:DateTimeAxis Position="Bottom" Title="Дата" MajorGridlineStyle="Solid" MinorGridlineStyle="Dash"/>
                     </oxy:Plot.Axes>
+                    <!--данные сумарное количество случаев для каждой страны для каждой даты-->
+                    
                     <oxy:LineSeries StrokeThickness="2" Color="Red" 
                                     ItemsSource="{Binding SelectedCountry.Counts}"
                                     DataFieldX="Date" DataFieldY="Count"/>
                 </oxy:Plot>
-                <map:Map Grid.Row="1" ZoomLevel="4" MaxZoomLevel="21" Center="{Binding SelectedCountry.Location, Converter={c:PointToMapLocation}}">
+                <!--<map:Map Grid.Row="1" ZoomLevel="4" MaxZoomLevel="21" Center="{Binding SelectedCountry.Location, Converter={c:PointToMapLocation}}">
                     <map:MapScale Margin="4" Opacity="1" Background="Transparent" VerticalAlignment="Bottom"/>
                     <map:MapGraticule Opacity="0.3" Background="Transparent"/>
                     <map:Map.MapLayer>
